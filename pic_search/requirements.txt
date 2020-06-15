@@ -1,0 +1,13 @@
+flask-cors
+numpy==1.16.5
+Pillow==6.2.1
+pymilvus==0.2.10
+flask
+flask_restful
+gunicorn==20.0.0
+tensorflow==1.15.2
+futures==3.1.1
+efficientnet-pytorch
+torch
+torchvision
+pymysql

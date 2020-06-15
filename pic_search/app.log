@@ -1,0 +1,10 @@
+2020-06-12 15:27:31,543 - werkzeug - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-06-12 15:27:38,661 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:27:38] "[37mPOST /deleteImages HTTP/1.1[0m" 200 -
+2020-06-12 15:27:45,601 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:27:45] "[37mPOST /deleteImages HTTP/1.1[0m" 200 -
+2020-06-12 15:27:56,889 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:27:56] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-06-12 15:28:01,349 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:28:01] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-06-12 15:28:09,467 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:28:09] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-06-12 15:28:12,367 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:28:12] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-06-12 15:28:19,400 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:28:19] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-06-12 15:28:22,379 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:28:22] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-06-12 15:28:24,683 - werkzeug - INFO - 192.168.1.110 - - [12/Jun/2020 15:28:24] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
