@@ -13,7 +13,7 @@ from numpy import linalg as LA
 
 
 class Img2Vec(object):
-    def __init__(self):
+    def __init__(self, model_name="resnet18"):
         self.TARGET_IMG_SIZE = 224
         self.transform = transforms.Compose([
             transforms.Resize((self.TARGET_IMG_SIZE, self.TARGET_IMG_SIZE)),
@@ -22,8 +22,18 @@ class Img2Vec(object):
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = models.resnet18(pretrained=True)
-        print(self.model)
+        if model_name == "resnet18":
+            self.model = models.resnet18(pretrained=True)
+            print(self.model)
+        if model_name == "resnet34":
+            self.model = models.resnet34(pretrained=True)
+        if model_name == "resnet50":
+            self.model = models.resnet50(pretrained=True)
+        if model_name == "resnet101":
+            self.model = models.resnet101(pretrained=True)
+        if model_name == "resnet52":
+            self.model = models.resnet152(pretrained=True)
+
         self.model.to(self.device)
         self.model.eval()
 

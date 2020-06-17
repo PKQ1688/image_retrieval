@@ -41,7 +41,9 @@ class Img2Vec(object):
 
             feature_vector = F.max_pool2d(feature_map, kernel_size=feature_map.size()[-1])
 
-        feature_vector = torch.squeeze(feature_vector)
+        # print('1111', feature_vector.shape)
+        feature_vector = torch.squeeze(feature_vector, 3)
+        feature_vector = torch.squeeze(feature_vector, 2)
         feature_vector = feature_vector.data.cpu().numpy()
 
         return feature_vector
@@ -55,6 +57,8 @@ class Img2Vec(object):
         img_tensor = torch.stack(img_list, dim=0)
 
         feature_vector = self.feature_extraction(img_tensor)
+
+        # print(feature_vector.shape)
 
         return feature_vector
 
@@ -70,6 +74,7 @@ class Img2Vec(object):
 
 if __name__ == '__main__':
     import os
+    import time
 
     os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
@@ -87,9 +92,13 @@ if __name__ == '__main__':
 
     img_list = list()
     img_list.append(path2base64(img_path_1))
-    img_list.append(path2base64(img_path_2))
-    img_list.append(path2base64(img_path_3))
+    # img_list.append(path2base64(img_path_2))
+    # img_list.append(path2base64(img_path_3))
 
     img_to_vec = Img2Vec()
+
+    s1 = time.time()
     norm_feat_list = img_to_vec(img_list)
     print(norm_feat_list)
+    s2 = time.time()
+    print('use time:', s2 - s1)

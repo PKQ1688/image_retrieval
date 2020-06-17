@@ -12,7 +12,7 @@ from PIL import Image
 class MetricResult(object):
     def __init__(self):
         # model_name="efficientnet-b1"
-        self.feature_vec = Img2Vec(model_name="efficientnet-b1")
+        self.feature_vec = Img2Vec(model_name="efficientnet-b7")
         self.transform = self.feature_vec.transform
 
     def get_vec(self, img):
@@ -96,4 +96,4 @@ if __name__ == '__main__':
     for i in range(3):
         acc = metric.acc_metric()
         acc_sum += acc
-    print(acc_sum / 3)
+    print('mean acc', acc_sum / 3)
