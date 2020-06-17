@@ -22,7 +22,8 @@ class Img2Vec(object):
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = models.vgg16(pretrained=True).features
+        self.model = models.resnet18(pretrained=True)
+        print(self.model)
         self.model.to(self.device)
         self.model.eval()
 

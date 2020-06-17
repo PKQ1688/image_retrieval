@@ -11,7 +11,8 @@ from PIL import Image
 
 class MetricResult(object):
     def __init__(self):
-        self.feature_vec = Img2Vec(model_name="efficientnet-b0")
+        # model_name="efficientnet-b1"
+        self.feature_vec = Img2Vec(model_name="efficientnet-b1")
         self.transform = self.feature_vec.transform
 
     def get_vec(self, img):
@@ -69,8 +70,8 @@ class MetricResult(object):
             calculation_list = random.sample(cls_path_list, 2)
             pos_cls_path = os.path.join(img_root_path, calculation_list[0])
             neg_cls_path = os.path.join(img_root_path, calculation_list[1])
-            print('pos_cls_name', calculation_list[0])
-            print('neg_cls_name', calculation_list[1])
+            # print('pos_cls_name', calculation_list[0])
+            # print('neg_cls_name', calculation_list[1])
             try:
                 if self.get_acc(pos_cls_path, neg_cls_path):
                     correct_result += 1
@@ -90,4 +91,9 @@ if __name__ == '__main__':
     # path2 = "test_pic/2.png"
     # img1 = Image.open(path1)
     # img2 = Image.open(path2)
-    MetricResult().acc_metric()
+    metric = MetricResult()
+    acc_sum = 0
+    for i in range(3):
+        acc = metric.acc_metric()
+        acc_sum += acc
+    print(acc_sum / 3)
