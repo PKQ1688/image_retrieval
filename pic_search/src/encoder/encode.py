@@ -1,64 +1,69 @@
-import torch.nn as nn
+# -*- coding:utf-8 -*-
+# @author :adolf
+import torch
 import torchvision.models as models
-import torch.cuda
 import torch.nn.functional as F
 import torchvision.transforms as transforms
-from numpy import linalg as LA
-
-from PIL import Image
 
 import base64
+from PIL import Image
 from io import BytesIO
 
-TARGET_IMG_SIZE = 224
-transform2 = transforms.Compose([
-    transforms.Resize((TARGET_IMG_SIZE, TARGET_IMG_SIZE)),
-    # transforms.CenterCrop(input_size),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-])
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = models.vgg16(pretrained=True).features
-model.to(device)
-model.eval()
+from numpy import linalg as LA
 
 
-def base64_pil(base64_str):
-    image = base64.b64decode(base64_str)
-    image = BytesIO(image)
-    image = Image.open(image)
-    return image
+class Img2Vec(object):
+    def __init__(self):
+        self.TARGET_IMG_SIZE = 224
+        self.transform = transforms.Compose([
+            transforms.Resize((self.TARGET_IMG_SIZE, self.TARGET_IMG_SIZE)),
+            # transforms.CenterCrop(input_size),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = models.vgg16(pretrained=True).features
+        self.model.to(self.device)
+        self.model.eval()
 
+    @staticmethod
+    def base64_pil(base64_str):
+        image = base64.b64decode(base64_str)
+        image = BytesIO(image)
+        image = Image.open(image)
+        return image
 
-def img_to_vec(base64list):
-    img_list = [base64_pil(base64img) for base64img in base64list]
+    def feature_extraction(self, img_tensor):
+        img_tensor = img_tensor.to(self.device)
 
-    img_list = [img.convert("RGB") for img in img_list]
-    img_list = [transform2(img) for img in img_list]
+        with torch.no_grad():
+            feature_map = self.model(img_tensor)
 
-    img_tensor = torch.stack(img_list, dim=0)
-    img_tensor = img_tensor.to(device)
+            feature_vector = F.max_pool2d(feature_map, kernel_size=feature_map.size()[-1])
 
-    with torch.no_grad():
-        result = model(img_tensor)
+        feature_vector = torch.squeeze(feature_vector)
+        feature_vector = feature_vector.data.cpu().numpy()
 
-    # print(result)
-    # print(result.shape)
+        return feature_vector
 
-    result = F.max_pool2d(result, kernel_size=result.size()[3:])
+    def __call__(self, base64list):
+        img_list = [self.base64_pil(base64img) for base64img in base64list]
 
-    result = torch.squeeze(result)
-    result = result.data.cpu().numpy()
+        img_list = [img.convert("RGB") for img in img_list]
+        img_list = [self.transform(img) for img in img_list]
 
-    norm_feat_list = list()
+        img_tensor = torch.stack(img_list, dim=0)
 
-    for i in range(result.shape[0]):
-        norm_feat = result[i] / LA.norm(result[i])
-        norm_feat = [i.item() for i in norm_feat]
-        norm_feat_list.append(norm_feat)
+        feature_vector = self.feature_extraction(img_tensor)
 
-    return norm_feat_list
+        norm_feat_list = list()
+
+        for i in range(feature_vector.shape[0]):
+            norm_feat = feature_vector[i] / LA.norm(feature_vector[i])
+            norm_feat = [i.item() for i in norm_feat]
+            norm_feat_list.append(norm_feat)
+
+        return norm_feat_list
 
 
 if __name__ == '__main__':
@@ -78,5 +83,5 @@ if __name__ == '__main__':
     img_list.append(path2base64(img_path_2))
     img_list.append(path2base64(img_path_3))
 
-    norm_feat_list = img_to_vec(img_list)
+    norm_feat_list = Img2Vec()(img_list)
     print(norm_feat_list)
