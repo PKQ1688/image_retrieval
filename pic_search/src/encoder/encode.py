@@ -83,5 +83,6 @@ if __name__ == '__main__':
     img_list.append(path2base64(img_path_2))
     img_list.append(path2base64(img_path_3))
 
-    norm_feat_list = Img2Vec()(img_list)
+    img_to_vec = Img2Vec()
+    norm_feat_list = img_to_vec(img_list)
     print(norm_feat_list)
