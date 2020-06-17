@@ -56,17 +56,24 @@ class Img2Vec(object):
 
         feature_vector = self.feature_extraction(img_tensor)
 
-        norm_feat_list = list()
+        return feature_vector
 
-        for i in range(feature_vector.shape[0]):
-            norm_feat = feature_vector[i] / LA.norm(feature_vector[i])
-            norm_feat = [i.item() for i in norm_feat]
-            norm_feat_list.append(norm_feat)
+        # norm_feat_list = list()
 
-        return norm_feat_list
+        # for i in range(feature_vector.shape[0]):
+        #     norm_feat = feature_vector[i] / LA.norm(feature_vector[i])
+        #     norm_feat = [i.item() for i in norm_feat]
+        #     norm_feat_list.append(norm_feat)
+
+        # return norm_feat_list
 
 
 if __name__ == '__main__':
+    import os
+
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+
+
     def path2base64(img_path):
         with open(img_path, 'rb') as f:
             image = f.read()

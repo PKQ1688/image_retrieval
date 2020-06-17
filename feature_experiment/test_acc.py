@@ -1,23 +1,28 @@
 # -*- coding:utf-8 -*-
 # @author :adolf
-from pic_search.src.encoder.encode import img_to_vec
-import base64
+import os
+
+from pic_search.src.encoder.encode import Img2Vec
+from PIL import Image
 
 
-def path2base64(img_path):
-    with open(img_path, 'rb') as f:
-        image = f.read()
-        encodestr = str(base64.b64encode(image), 'utf-8')
-    return encodestr
+class MetricResult(object):
+    def __init__(self):
+        self.feature_vec = Img2Vec()
+        self.transform = self.feature_vec.transform
+
+    def get_vec(self, img_path):
+        img = Image.open(img_path).convert("RGB")
+        img_tensor = self.transform(img)
+
+        feature = self.feature_vec.feature_extraction(img_tensor)
+
+        return feature
 
 
-img_path_1 = "test_pic/1.png"
-img_path_2 = "test_pic/2.png"
-img_path_3 = "test_pic/3.png"
+if __name__ == '__main__':
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
-img_list = list()
-img_list.append(path2base64(img_path_1))
-img_list.append(path2base64(img_path_2))
-img_list.append(path2base64(img_path_3))
+    print(MetricResult().get_vec("test_pic/1.png"))
 
-norm_feat_list = img_to_vec(img_list)
+
