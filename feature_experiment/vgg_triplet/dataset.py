@@ -7,6 +7,7 @@ from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 from tqdm import tqdm
 
+
 class TripleDateSet(Dataset):
     def __init__(self, data_path, is_training=True):
         cls_path_list = os.listdir(data_path)
