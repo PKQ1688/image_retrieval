@@ -4,15 +4,16 @@ import os
 import random
 import numpy as np
 
-# from pic_search.src.encoder.encode import Img2Vec
-from pic_search.src.encoder.encode_efficientent import Img2Vec
+from pic_search.src.encoder.encode import Img2Vec
+# from pic_search.src.encoder.encode_efficientent import Img2Vec
 from PIL import Image
 
 
 class MetricResult(object):
     def __init__(self):
         # model_name="efficientnet-b1"
-        self.feature_vec = Img2Vec(model_name="efficientnet-b7")
+        # self.feature_vec = Img2Vec()
+        self.feature_vec = Img2Vec(model_path="model/vgg_triplet.pth")
         self.transform = self.feature_vec.transform
 
     def get_vec(self, img):

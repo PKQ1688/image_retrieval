@@ -2,7 +2,7 @@
 # @author :adolf
 from feature_experiment.vgg_triplet.model import VggTriplet
 from feature_experiment.vgg_triplet.dataset import TripleDateSet
-from feature_experiment.vgg_triplet.
+from feature_experiment.vgg_triplet import lr_scheduler
 
 import os
 import numpy as np
@@ -20,10 +20,10 @@ class TrainTool(object):
                  data_path,
                  batch_size=16,
                  workers=0,
-                 epochs=1200,
-                 lr=1e-3):
+                 epochs=5,
+                 lr=1e-5):
         self.data_path = data_path
-        self.model_path = 'model/vgg_triplet.pth'
+        self.model_path = 'model/vgg_triplet_v2.pth'
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -36,7 +36,7 @@ class TrainTool(object):
         self.train_loader, self.valid_loader = self.data_loaders()
 
         self.model = VggTriplet()
-        self.model.apply(self.weights_init)
+        # self.model.apply(self.weights_init)
 
         self.model = self.model.to(self.device)
 
@@ -48,7 +48,7 @@ class TrainTool(object):
         self.scheduler = lr_scheduler.LR_Scheduler_Head(mode='poly',
                                                         base_lr=self.lr,
                                                         num_epochs=self.epochs,
-                                                        iters_per_epoch=len(self.loader_train),
+                                                        iters_per_epoch=len(self.train_loader),
                                                         warmup_epochs=1)
 
     @staticmethod
@@ -91,6 +91,9 @@ class TrainTool(object):
     def train_one_epoch(self, epoch):
         self.model.train()
         for batch_idx, (anchor, positive, negative) in enumerate(self.train_loader):
+
+            self.scheduler(self.optimizer, batch_idx, epoch, self.val_best_acc)
+
             anchor = anchor.to(self.device)
             positive = positive.to(self.device)
             negative = negative.to(self.device)
@@ -103,9 +106,9 @@ class TrainTool(object):
             loss.backward()
             self.optimizer.step()
 
-            if batch_idx % 1 == 0:
-                print('Epoch [{}], Step [{}], Loss: {:.4f}'
-                      .format(epoch, batch_idx, loss.item()))
+            if batch_idx % 50 == 0:
+                print('Epoch:[{}/{}]\t iter:[{}]\t loss={:.5f}\t lr={}'
+                      .format(epoch, self.epochs, batch_idx, loss, self.optimizer.param_groups[0]['lr']))
 
     def val_model(self):
         self.model.eval()
@@ -121,17 +124,26 @@ class TrainTool(object):
             an1_vector = torch.squeeze(an1)
             an1_vector = an1_vector.data.cpu().numpy()
 
-            pos1_vector = torch.squeeze(an1)
+            pos1_vector = torch.squeeze(pos1)
             pos1_vector = pos1_vector.data.cpu().numpy()
 
-            neg1_vector = torch.squeeze(an1)
+            neg1_vector = torch.squeeze(neg1)
             neg1_vector = neg1_vector.data.cpu().numpy()
+
+            # print('an1_vector', an1_vector)
+            # print('pos1_vector', pos1_vector)
+            # print('neg1_vector', neg1_vector)
 
             dist1 = np.linalg.norm(an1_vector - pos1_vector)
             dist2 = np.linalg.norm(an1_vector - neg1_vector)
 
+            # print('dist1', dist1)
+            # print('dist2', dist2)
+
             if dist1 < dist2:
                 correct += 1
+        # print('correct', correct)
+        # print('total', total)
         acc = correct / total * 1.0
 
         return acc
@@ -140,7 +152,7 @@ class TrainTool(object):
         for epoch in tqdm(range(self.epochs), total=self.epochs):
             self.train_one_epoch(epoch)
             val_acc = self.val_model()
-            print(val_acc)
+            print('verification accuracy:', val_acc)
             if val_acc > self.val_best_acc:
                 torch.save(self.model.state_dict(), self.model_path)
 

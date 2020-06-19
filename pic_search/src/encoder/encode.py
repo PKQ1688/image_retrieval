@@ -13,7 +13,7 @@ from numpy import linalg as LA
 
 
 class Img2Vec(object):
-    def __init__(self):
+    def __init__(self, model_path=None):
         self.TARGET_IMG_SIZE = 224
         self.transform = transforms.Compose([
             transforms.Resize((self.TARGET_IMG_SIZE, self.TARGET_IMG_SIZE)),
@@ -23,6 +23,14 @@ class Img2Vec(object):
         ])
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = models.vgg16(pretrained=True).features
+        if model_path is not None:
+            model_dict = self.model.state_dict()
+            pre_model = torch.load(model_path)
+            pre_state_dict = {k: v for k, v in pre_model.items() if k in model_dict.keys()}
+
+            model_dict.update(pre_state_dict)
+
+            self.model.load_state_dict(model_dict)
         self.model.to(self.device)
         self.model.eval()
 
