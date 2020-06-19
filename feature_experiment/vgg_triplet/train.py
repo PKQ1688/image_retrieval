@@ -2,6 +2,7 @@
 # @author :adolf
 from feature_experiment.vgg_triplet.model import VggTriplet
 from feature_experiment.vgg_triplet.dataset import TripleDateSet
+from feature_experiment.vgg_triplet.
 
 import os
 import numpy as np
@@ -17,14 +18,14 @@ import torch.nn.functional as F
 class TrainTool(object):
     def __init__(self,
                  data_path,
-                 batch_size=64,
-                 workers=8,
+                 batch_size=16,
+                 workers=0,
                  epochs=1200,
                  lr=1e-3):
         self.data_path = data_path
         self.model_path = 'model/vgg_triplet.pth'
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         self.batch_size = batch_size
         self.workers = workers
@@ -43,6 +44,12 @@ class TrainTool(object):
         self.optimizer = optim.Adam(self.model.parameters())
 
         self.val_best_acc = 0
+
+        self.scheduler = lr_scheduler.LR_Scheduler_Head(mode='poly',
+                                                        base_lr=self.lr,
+                                                        num_epochs=self.epochs,
+                                                        iters_per_epoch=len(self.loader_train),
+                                                        warmup_epochs=1)
 
     @staticmethod
     def weights_init(m):
@@ -96,7 +103,7 @@ class TrainTool(object):
             loss.backward()
             self.optimizer.step()
 
-            if batch_idx % 10 == 0:
+            if batch_idx % 1 == 0:
                 print('Epoch [{}], Step [{}], Loss: {:.4f}'
                       .format(epoch, batch_idx, loss.item()))
 
@@ -133,7 +140,7 @@ class TrainTool(object):
         for epoch in tqdm(range(self.epochs), total=self.epochs):
             self.train_one_epoch(epoch)
             val_acc = self.val_model()
-
+            print(val_acc)
             if val_acc > self.val_best_acc:
                 torch.save(self.model.state_dict(), self.model_path)
 

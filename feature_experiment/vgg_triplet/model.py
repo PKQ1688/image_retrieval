@@ -9,7 +9,7 @@ class VggTriplet(nn.Module):
     def __init__(self):
         super().__init__()
 
-        self.model = models.vgg16(pretrained=True).features
+        self.model = models.vgg16(pretrained=False).features
 
     def forward(self, anchor, positive, negative):
         an1 = self.model(anchor)

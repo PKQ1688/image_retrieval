@@ -6,6 +6,8 @@ from PIL import Image
 from torch.utils.data import Dataset
 import torchvision.transforms as transforms
 from tqdm import tqdm
+import cv2
+import numpy as np
 
 
 class TripleDateSet(Dataset):
@@ -25,9 +27,13 @@ class TripleDateSet(Dataset):
             img_name_list = os.listdir(img_name_path)
             for img_name in img_name_list:
                 anchor = Image.open(os.path.join(img_name_path, img_name)).convert("RGB")
+                # anchor = cv2.imdecode(np.fromfile(os.path.join(img_name_path, img_name), dtype=np.uint8), -1)
+                # anchor = Image.fromarray(anchor).convert("RGB")
 
                 pos_name = random.choice(img_name_list)
                 positive = Image.open(os.path.join(img_name_path, pos_name)).convert("RGB")
+                # positive = cv2.imdecode(np.fromfile(os.path.join(img_name_path, pos_name), dtype=np.uint8), -1)
+                # positive = Image.fromarray(positive).convert("RGB")
 
                 neg_cls = random.choice(cls_path_list)
                 neg_img_list = os.listdir(os.path.join(data_path, neg_cls))
@@ -35,12 +41,11 @@ class TripleDateSet(Dataset):
                 neg_img_name = random.choice(neg_img_list)
 
                 negative = Image.open(os.path.join(data_path, neg_cls, neg_img_name)).convert("RGB")
+                # print("1111", os.path.join(data_path, neg_cls, neg_img_name))
+                # negative = cv2.imdecode(np.fromfile(os.path.join(data_path, neg_cls, neg_img_name), dtype=np.uint8), -1)
+                # negative = Image.fromarray(negative).convert("RGB")
 
                 self.patients.append((anchor, positive, negative))
-
-                anchor.close()
-                positive.close()
-                negative.close()
 
         random.shuffle(self.patients)
         # self.patients = self.patients[:10]
@@ -52,6 +57,8 @@ class TripleDateSet(Dataset):
             self.patients = self.patients[-validation_cases:]
         else:
             self.patients = self.patients[:-validation_cases]
+
+        print('data length:', len(self.patients))
 
     def __len__(self):
         return len(self.patients)
