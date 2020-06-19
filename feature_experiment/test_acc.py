@@ -13,7 +13,7 @@ class MetricResult(object):
     def __init__(self):
         # model_name="efficientnet-b1"
         # self.feature_vec = Img2Vec()
-        self.feature_vec = Img2Vec(model_path="model/vgg_triplet.pth")
+        self.feature_vec = Img2Vec(model_path="model/vgg_triplet_v2.pth")
         self.transform = self.feature_vec.transform
 
     def get_vec(self, img):

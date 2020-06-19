@@ -26,9 +26,15 @@ class Img2Vec(object):
         if model_path is not None:
             model_dict = self.model.state_dict()
             pre_model = torch.load(model_path)
-            pre_state_dict = {k: v for k, v in pre_model.items() if k in model_dict.keys()}
+            for k, v in pre_model.items():
+                # print('pre_state_dict', k)
+                model_dict[k.replace('vgg.', '')] = v
 
-            model_dict.update(pre_state_dict)
+            # pre_state_dict = {k: v for k, v in pre_model.items() if k in model_dict.keys()}
+            # print('pre_state_dict')
+            # print('model_dict_111', model_dict.keys())
+            # model_dict.update(pre_state_dict)
+            # print('model_dict_222', model_dict.keys())
 
             self.model.load_state_dict(model_dict)
         self.model.to(self.device)
