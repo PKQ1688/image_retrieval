@@ -73,7 +73,8 @@ class Img2Vec(object):
         feature_vector = self.feature_extraction(img_tensor)
 
         # print(feature_vector.shape)
-
+        feature_vector = feature_vector.tolist()
+        # feature_list = [feat.tolist() for feat in feature_vector]
         return feature_vector
 
         # norm_feat_list = list()
@@ -106,8 +107,8 @@ if __name__ == '__main__':
 
     img_list = list()
     img_list.append(path2base64(img_path_1))
-    # img_list.append(path2base64(img_path_2))
-    # img_list.append(path2base64(img_path_3))
+    img_list.append(path2base64(img_path_2))
+    img_list.append(path2base64(img_path_3))
 
     img_to_vec = Img2Vec()
 
