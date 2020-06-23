@@ -42,7 +42,7 @@ class Img2Vec(object):
 
     @staticmethod
     def base64_pil(base64_str):
-        image = base64.b64decode(base64_str)
+        image = base64.b64decode(base64_str, '-_')
         image = BytesIO(image)
         image = Image.open(image)
         return image
