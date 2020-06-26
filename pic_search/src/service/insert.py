@@ -13,7 +13,6 @@ def img_to_vectors(conn, cursor, img_to_vec, ids_image, img):
     ids_img = []
     info = []
 
-    time1 = time.time()
     for i in range(len(ids_image)):
         has_id = search_by_image_id(conn, cursor, ids_image[i])
         if has_id:
@@ -23,17 +22,8 @@ def img_to_vectors(conn, cursor, img_to_vec, ids_image, img):
         else:
             img_list.append(img[i])
             ids_img.append(ids_image[i])
-    time2 = time.time()
 
-    # if len(img_list):
-    #     try:
     vectors_img = img_to_vec(img_list)
-        # except:
-            # print("The imagebase64 has wrong data.")
-            # info = "The imagebase6 has wrong data."
-    time3 = time.time()
-    print("_____insert_mysql_time:", time2 -time1)
-    print("_____get_img_vec_time:", time3 -time2)
     return vectors_img, ids_img, info
 
 
@@ -54,21 +44,15 @@ def init_table(index_client, conn, cursor):
 
 
 def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img):
-    init_table(index_client, conn, cursor)
-    vectors_img, ids_img, info = img_to_vectors(conn, cursor, img_to_vec, ids_image, img)
-    print(len(vectors_img),len(ids_img))
-
-    if len(vectors_img):
-        time1 = time.time()
+    try:
+        init_table(index_client, conn, cursor)
+        vectors_img, ids_img, info = img_to_vectors(conn, cursor, img_to_vec, ids_image, img)
+        # print(len(vectors_img),len(ids_img))
         status, ids_milvus = insert_vectors(index_client, DEFAULT_TABLE, vectors_img)
-        time2 = time.time()
 
-        print("insert_milvus:", status, ids_milvus)
         get_ids_file(ids_milvus, ids_img)
         load_data_to_mysql(conn, cursor)
-        time3 = time.time()
-        print("_____insert_milvus_time:", time2 -time1)
-        print("_____load_mysql_time:", time3 -time2)
+
         return status, info
-    else:
-        return None, info
+    except Exception as e:
+        return None, "Error with {}".format(e)

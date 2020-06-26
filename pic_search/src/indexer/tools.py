@@ -52,19 +52,14 @@ def search_by_image_id(conn, cursor, image_id):
 
 def load_data_to_mysql(conn, cursor):
     sql = "load data local infile '" + FILE_NAME + "' into table " + DEFAULT_TABLE + " fields terminated by ',';"
-    try:
-        cursor.execute(sql)
-        conn.commit()
-    except Exception as e:
-        log.error(e)
+    cursor.execute(sql)
+    conn.commit()
+
 
 
 def delete_data(conn, cursor, image_id):
     str_ids = [str(_id) for _id in image_id]
     str_ids = str(str_ids).replace('[','').replace(']','')
     sql = "delete from " + DEFAULT_TABLE + " where images_id in (" + str_ids + ");"
-    try:
-        cursor.execute(sql)
-        conn.commit()
-    except Exception as e:
-        log.error(e)
+    cursor.execute(sql)
+    conn.commit()
