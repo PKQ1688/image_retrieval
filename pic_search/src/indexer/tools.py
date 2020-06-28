@@ -21,10 +21,8 @@ def create_table_mysql(conn,cursor):
 
 
 def search_by_milvus_ids(conn, cursor, ids):
-    str_ids = [str(_id) for _id in ids]
+    str_ids = str(ids)
     str_ids = str(str_ids).replace('[','').replace(']','')
-    # str_ids = str(ids)
-    # str_ids = str(str_ids).replace('[','').replace(']','')
     sql = "select images_id from " + DEFAULT_TABLE + " where milvus_id in (" + str_ids + ") order by field (milvus_id," + str_ids + ");"
     try:
         cursor.execute(sql)
