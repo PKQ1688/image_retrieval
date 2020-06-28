@@ -47,7 +47,6 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img):
     try:
         init_table(index_client, conn, cursor)
         vectors_img, ids_img, info = img_to_vectors(conn, cursor, img_to_vec, ids_image, img)
-        log.info(vectors_img)
         # print(len(vectors_img),len(ids_img))
         status, ids_milvus = insert_vectors(index_client, DEFAULT_TABLE, vectors_img)
 
