@@ -77,7 +77,7 @@ class Img2Vec(object):
         feature_vector = feature_vector.tolist()
 
         # feature_list = [feat.tolist() for feat in feature_vector]
-        log.info(feature_vector)
+        # log.info(feature_vector)
         return feature_vector
 
         # norm_feat_list = list()

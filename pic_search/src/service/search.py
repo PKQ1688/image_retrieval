@@ -19,7 +19,7 @@ def do_search(index_client, conn, cursor, img_to_vec, img_list):
             if ids == -1:
                 break
             status, vector = get_vector_by_ids(index_client, DEFAULT_TABLE, ids)
-            log.info(status, vector)
+            log.log(status, vector)
         re_ids = search_by_milvus_ids(conn, cursor, vids)
         re_ids_img.append(re_ids)
     return re_ids_img
