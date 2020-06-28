@@ -88,7 +88,7 @@ def delete_vectors(client, table_name, ids):
 
 def get_vector_by_ids(client, table_name, ids):
     try:
-        status, vector = client.get_vector_by_id(collection_name=table_name, ids=ids)
+        status, vector = client.get_vector_by_id(collection_name=table_name, vector_id=ids)
         return status, vector
     except Exception as e:
         log.error(e)
