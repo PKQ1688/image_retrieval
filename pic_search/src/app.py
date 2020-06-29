@@ -83,7 +83,6 @@ def do_search_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
-        add_argument('File', type=str). \
         parse_args()
     ids = args['Id'].split(",")
     image = args['Image'].split(",")
