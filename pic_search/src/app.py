@@ -1,6 +1,6 @@
 import os
 import logging
-from common.config import DATA_PATH, DEFAULT_TABLE
+from common.config import DEFAULT_TABLE
 from service.insert import do_insert
 from service.search import do_search
 from service.count import do_count
@@ -15,7 +15,6 @@ from indexer.tools import connect_mysql
 import time
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = DATA_PATH
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
