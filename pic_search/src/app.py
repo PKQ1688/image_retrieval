@@ -46,7 +46,7 @@ def do_insert_images_api():
     file_image = request.files.get('FileImage', "")
 
     if file_id and file_image:
-        ids = str(ids.read().decode("utf-8")).strip().split(",")
+        ids = str(file_id.read().decode("utf-8")).strip().split(",")
         image = str(file_image.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
         image = image[:-1]
@@ -70,7 +70,7 @@ def do_delete_images_api():
     file_id = request.files.get('FileId', "")
 
     if file_id:
-        ids = str(ids.read().decode("utf-8")).strip().split(",")
+        ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
     else:
         ids = args['Id'].split(",")
@@ -103,7 +103,7 @@ def do_search_images_api():
     file_image = request.files.get('FileImage', "")
 
     if file_id and file_image:
-        ids = str(ids.read().decode("utf-8")).strip().split(",")
+        ids = str(file_id.read().decode("utf-8")).strip().split(",")
         image = str(file_image.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
         image = image[:-1]
