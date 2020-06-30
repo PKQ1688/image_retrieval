@@ -121,14 +121,13 @@ def do_search_images_api():
         init_conn()
         result = do_search(index_client, conn, cursor, img_to_vec, image)
 
-
         # with open("results_0630.txt","w") as f:
         #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
         #    f.write("\n")
         #    for i in result:
         #        f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
 
-        return "{0},{1}".format(ids, result)
+        return "{0},{1}".format(ids, result), 200
     except Exception as e:
         return "Error with {}".format(e), 400
 
