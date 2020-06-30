@@ -48,7 +48,7 @@ def do_insert_images_api():
     if file_id and file_image:
         # ids = file_id.read().strip().split(",")
         # image = file_image.read().strip().split(",")
-        ids = file_id.read()
+        ids = file_id.stream.read()
         image = file_image.read()
 
         # print("file:",file_id, file_image)
