@@ -120,17 +120,18 @@ def do_search_images_api():
     try:
         init_conn()
         result = do_search(index_client, conn, cursor, img_to_vec, image)
+
+
+        # with open("results_0630.txt","w") as f:
+        #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
+        #    f.write("\n")
+        #    for i in result:
+        #        f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
+
         return "{0},{1}".format(ids, result)
-
-        with open("results_0630.txt","w") as f:
-           f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
-           f.write("\n")
-           for i in result:
-               f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
-
     except Exception as e:
         return "Error with {}".format(e), 400
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5001)
+    app.run(host="0.0.0.0",port=5000)
