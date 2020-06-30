@@ -46,8 +46,10 @@ def do_insert_images_api():
     file_image = request.files.get('FileImage', "")
 
     if file_id and file_image:
-        ids = file_id.read().strip().split(",")
-        image = file_image.read().strip().split(",")
+        # ids = file_id.read().strip().split(",")
+        # image = file_image.read().strip().split(",")
+        ids = file_id.read()
+        image = file_image.read()
 
         # print("file:",file_id, file_image)
         # with open(file_id) as fid:
@@ -56,7 +58,7 @@ def do_insert_images_api():
         # with open(file_image) as fimg:
         #     image = fimg.read().strip().split(",")
         #     # image = image[:-1]
-        print(ids, len(image))
+        print(ids)
     else:
         ids = args['Id'].split(",")
         image = args['Image'].split(",")
@@ -123,4 +125,4 @@ def do_search_images_api():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000)
+    app.run(host="0.0.0.0",port=5001)
