@@ -46,13 +46,16 @@ def do_insert_images_api():
     file_image = request.files.get('FileImage', "")
 
     if file_id and file_image:
-        print("file:",file_id, file_image)
-        with open(file_id) as fid:
-            ids = fid.read().strip().split(",")
-            # ids = ids[:-1]
-        with open(file_image) as fimg:
-            image = fimg.read().strip().split(",")
-            # image = image[:-1]
+        ids = file_id.read().strip().split(",")
+        image = file_image.read().strip().split(",")
+
+        # print("file:",file_id, file_image)
+        # with open(file_id) as fid:
+        #     ids = fid.read().strip().split(",")
+        #     # ids = ids[:-1]
+        # with open(file_image) as fimg:
+        #     image = fimg.read().strip().split(",")
+        #     # image = image[:-1]
         print(ids, len(image))
     else:
         ids = args['Id'].split(",")
