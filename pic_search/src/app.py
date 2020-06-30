@@ -46,21 +46,10 @@ def do_insert_images_api():
     file_image = request.files.get('FileImage', "")
 
     if file_id and file_image:
-        # ids = file_id.read().strip().split(",")
-        # image = file_image.read().strip().split(",")
-        ids = file_id.read()
-        print(ids)
-        ids = TextIOWrapper(ids)
-        image = file_image.read()
-
-        # print("file:",file_id, file_image)
-        # with open(file_id) as fid:
-        #     ids = fid.read().strip().split(",")
-        #     # ids = ids[:-1]
-        # with open(file_image) as fimg:
-        #     image = fimg.read().strip().split(",")
-        #     # image = image[:-1]
-        print("---------------------",ids)
+        ids = str(ids.read().decode("utf-8")).strip().split(",")
+        image = str(file_image.read().decode("utf-8")).strip().split(",")
+        ids = ids[:-1]
+        image = image[:-1]
     else:
         ids = args['Id'].split(",")
         image = args['Image'].split(",")
@@ -78,7 +67,14 @@ def do_delete_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         parse_args()
-    ids = args['Id'].split(",")
+    file_id = request.files.get('FileId', "")
+
+    if file_id:
+        ids = str(ids.read().decode("utf-8")).strip().split(",")
+        ids = ids[:-1]
+    else:
+        ids = args['Id'].split(",")
+
     try:
         init_conn()
         status, info = do_delete(index_client, conn, cursor, ids)
@@ -105,15 +101,12 @@ def do_search_images_api():
         parse_args()
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
+
     if file_id and file_image:
-        # print("file:",file_id, file_image)
-        with open(file_id) as fid:
-            ids = fid.read().strip().split(",")
-            # ids = ids[:-1]
-        with open(file_image) as fimg:
-            image = fimg.read().strip().split(",")
-            # image = image[:-1]
-        print(ids, len(image))
+        ids = str(ids.read().decode("utf-8")).strip().split(",")
+        image = str(file_image.read().decode("utf-8")).strip().split(",")
+        ids = ids[:-1]
+        image = image[:-1]
     else:
         ids = args['Id'].split(",")
         image = args['Image'].split(",")
