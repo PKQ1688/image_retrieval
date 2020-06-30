@@ -41,10 +41,23 @@ def do_insert_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
-        add_argument('File', type=str). \
         parse_args()
-    ids = args['Id'].split(",")
-    image = args['Image'].split(",")
+    file_id = request.files.get('FileId', "")
+    file_image = request.files.get('FileImage', "")
+
+    if file_id and file_image:
+        print("file:",file_id, file_image)
+        with open(file_id) as fid:
+            ids = fid.read().strip().split(",")
+            # ids = ids[:-1]
+        with open(file_image) as fimg:
+            image = fimg.read().strip().split(",")
+            # image = image[:-1]
+        print(ids, len(image))
+    else:
+        ids = args['Id'].split(",")
+        image = args['Image'].split(",")
+
     try:
         init_conn()
         status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image)
@@ -83,8 +96,21 @@ def do_search_images_api():
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
         parse_args()
-    ids = args['Id'].split(",")
-    image = args['Image'].split(",")
+    file_id = request.files.get('FileId', "")
+    file_image = request.files.get('FileImage', "")
+    if file_id and file_image:
+        # print("file:",file_id, file_image)
+        with open(file_id) as fid:
+            ids = fid.read().strip().split(",")
+            # ids = ids[:-1]
+        with open(file_image) as fimg:
+            image = fimg.read().strip().split(",")
+            # image = image[:-1]
+        print(ids, len(image))
+    else:
+        ids = args['Id'].split(",")
+        image = args['Image'].split(",")
+
     try:
         init_conn()
         result = do_search(index_client, conn, cursor, img_to_vec, image)
