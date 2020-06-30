@@ -45,13 +45,16 @@ def do_insert_images_api():
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
 
-    if file_id and file_image:
+    if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
-        image = str(file_image.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
-        image = image[:-1]
     else:
         ids = args['Id'].split(",")
+
+    if file_image:
+        image = str(file_image.read().decode("utf-8")).strip().split(",")
+        image = image[:-1]
+    else:
         image = args['Image'].split(",")
 
     try:
@@ -102,19 +105,29 @@ def do_search_images_api():
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
 
-    if file_id and file_image:
+    if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
-        image = str(file_image.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
-        image = image[:-1]
     else:
         ids = args['Id'].split(",")
+
+    if file_image:
+        image = str(file_image.read().decode("utf-8")).strip().split(",")
+        image = image[:-1]
+    else:
         image = args['Image'].split(",")
 
     try:
         init_conn()
         result = do_search(index_client, conn, cursor, img_to_vec, image)
         return "{0},{1}".format(ids, result)
+
+        with open("results_0630.txt","w") as f:
+           f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
+           f.write("\n")
+           for i in result:
+               f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
+
     except Exception as e:
         return "Error with {}".format(e), 400
 
