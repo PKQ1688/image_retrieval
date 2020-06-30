@@ -3,7 +3,6 @@ from common.config import DEFAULT_TABLE, FILE_NAME
 from indexer.index import milvus_client, create_table, insert_vectors, create_index, has_table
 from indexer.tools import connect_mysql, create_table_mysql, search_by_image_id, load_data_to_mysql
 import datetime
-from encoder.encode import Img2Vec
 import time
 
 
