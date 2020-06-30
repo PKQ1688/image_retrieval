@@ -2,7 +2,6 @@ import logging as log
 from common.config import DEFAULT_TABLE
 from indexer.index import milvus_client, search_vectors, get_vector_by_ids
 from indexer.tools import connect_mysql, search_by_milvus_ids
-from encoder.encode import Img2Vec
 import time
 
 

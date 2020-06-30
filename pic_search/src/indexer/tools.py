@@ -1,11 +1,12 @@
 import logging as log
-from common.config import DEFAULT_TABLE, FILE_NAME
+from common.config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PWD, MYSQL_DB, DEFAULT_TABLE, FILE_NAME
 import pymysql
 
 
 def connect_mysql():
     try:
-        conn = pymysql.connect(host="127.0.0.1",user="root",port=3306,password="123456",database="mysql", local_infile=True)
+        # conn = pymysql.connect(host="127.0.0.1",user="root",port=3306,password="123456",database="mysql", local_infile=True)
+        conn = pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,port=MYSQL_PORT,password=MYSQL_PWD,database=MYSQL_DB, local_infile=True)
         return conn
     except Exception as e:
         log.error(e)
