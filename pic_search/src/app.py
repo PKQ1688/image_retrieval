@@ -36,7 +36,7 @@ def init_conn():
         cursor = conn.cursor()
 
 
-@app.route('/addImages', methods=['GET'])
+@app.route('/addImages', methods=['POST'])
 def do_insert_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
@@ -65,7 +65,7 @@ def do_insert_images_api():
         return "Error with {}".format(e), 400
 
 
-@app.route('/deleteImages', methods=['GET'])
+@app.route('/deleteImages', methods=['POST'])
 def do_delete_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
@@ -86,7 +86,7 @@ def do_delete_images_api():
         return "Error with {}".format(e), 400
 
 
-@app.route('/countImages', methods=['GET'])
+@app.route('/countImages', methods=['POST'])
 def do_count_images_api():
     try:
         init_conn()
@@ -96,7 +96,7 @@ def do_count_images_api():
         return "Error with {}".format(e), 400
 
 
-@app.route('/getSimilarImages', methods=['GET'])
+@app.route('/getSimilarImages', methods=['POST'])
 def do_search_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
