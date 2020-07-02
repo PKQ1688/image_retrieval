@@ -7,8 +7,7 @@ from encoder.encode import Img2Vec
 import time
 
 
-def img_to_vectors(conn, cursor, img_to_vec, ids_image, img):
-    vectors_img = []
+def get_img_ids(conn, cursor, ids_image, img):
     img_list = []
     ids_img = []
     info = []
@@ -23,8 +22,7 @@ def img_to_vectors(conn, cursor, img_to_vec, ids_image, img):
             img_list.append(img[i])
             ids_img.append(ids_image[i])
 
-    vectors_img = img_to_vec(img_list)
-    return vectors_img, ids_img, info
+    return img_list, ids_img, info
 
 
 def get_ids_file(ids_milvus, ids_image):
@@ -44,9 +42,12 @@ def init_table(index_client, conn, cursor):
 
 
 def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img):
+    if len(ids_image)!= len(img):
+        return "The number of pictures is not consistent with the ID number, please check!", None
+    init_table(index_client, conn, cursor)
+    img_list, ids_img, info = get_img_ids(conn, cursor, ids_image, img)
     try:
-        init_table(index_client, conn, cursor)
-        vectors_img, ids_img, info = img_to_vectors(conn, cursor, img_to_vec, ids_image, img)
+        vectors_img = img_to_vec(img_list)
         # print(len(vectors_img),len(ids_img))
         status, ids_milvus = insert_vectors(index_client, DEFAULT_TABLE, vectors_img)
 
@@ -55,5 +56,7 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img):
 
         return status, info
     except Exception as e:
+        if img_list and ids_img:
+            return None, "All the image id exists!"
         log.error(e)
         return None, "Error with {}".format(e)
