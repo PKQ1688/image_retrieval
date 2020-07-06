@@ -46,7 +46,7 @@ def do_insert_images_api():
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
 
-    size = ids = args['Size']
+    size = args['Size']
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
