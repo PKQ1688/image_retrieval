@@ -41,17 +41,27 @@ def init_table(index_client, conn, cursor):
         create_table_mysql(conn, cursor)
 
 
-def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img):
+def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size):
     if len(ids_image)!= len(img):
         return "The number of pictures is not consistent with the ID number, please check!", None
+    if not size:
+        size = 200
     init_table(index_client, conn, cursor)
     img_list, ids_img, info = get_img_ids(conn, cursor, ids_image, img)
     try:
-        vectors_img = img_to_vec(img_list)
+        i = 0
+        while i+size<len(ids_image):
+            insert_img_list = img_list[i:i+size]
+            insert_ids_img = ids_img[i:i+size]
+            i = i+size
+        else:
+            insert_img_list = img_list[i:len(ids_image)]
+            insert_ids_img = ids_img[i:len(ids_image)]
+        vectors_img = img_to_vec(insert_img_list)
         # print(len(vectors_img),len(ids_img))
         status, ids_milvus = insert_vectors(index_client, DEFAULT_TABLE, vectors_img)
 
-        get_ids_file(ids_milvus, ids_img)
+        get_ids_file(ids_milvus, insert_ids_img)
         load_data_to_mysql(conn, cursor)
 
         return status, info

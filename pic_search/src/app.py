@@ -41,10 +41,12 @@ def do_insert_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
+        add_argument('Size', type=int). \
         parse_args()
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
 
+    size = ids = args['Size']
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
@@ -59,7 +61,7 @@ def do_insert_images_api():
 
     try:
         init_conn()
-        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image)
+        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
