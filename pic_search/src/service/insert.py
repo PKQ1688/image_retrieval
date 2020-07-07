@@ -55,7 +55,7 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
         table_name = DEFAULT_TABLE
     if not size:
         size = 200
-    print("size:", size, "table_name:", table_name, len(ids_image), len(img))
+    print("table_name:", table_name, ", num of orgin ids:", len(ids_image),", num of orgin img:", len(img))
 
     if len(ids_image)!= len(img):
         return "The number of pictures is not consistent with the ID number, please check!", None
@@ -70,12 +70,12 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
             insert_img_list = img_list[i:i+size]
             insert_ids_img = ids_img[i:i+size]
             i = i+size
-            print("doing insert, size:", size, "the len of insert:", len(insert_img_list))
+            print("doing insert, size:", size, "the num of insert vectors:", len(insert_img_list))
             status = insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_ids_img, table_name)
         else:
             insert_img_list = img_list[i:len(ids_image)]
             insert_ids_img = ids_img[i:len(ids_image)]
-            print("doing insert, size:", size, "the len of insert:", len(insert_img_list))
+            print("doing insert, size:", size, ",the num of insert vectors:", len(insert_img_list))
             status = insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_ids_img, table_name)
 
         return status, info
