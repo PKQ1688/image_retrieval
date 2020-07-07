@@ -60,7 +60,9 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
     if len(ids_image)!= len(img):
         return "The number of pictures is not consistent with the ID number, please check!", None
     init_table(index_client, conn, cursor, table_name)
-    img_list, ids_img, info = get_img_ids(conn, cursor, ids_image, img, table_name
+    img_list, ids_img, info = get_img_ids(conn, cursor, ids_image, img, table_name)
+    if img_list :
+        return None, "All the image id exists!"
     try:
         i = 0
         while i+size<len(ids_img):
@@ -76,7 +78,5 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
 
         return status, info
     except Exception as e:
-        if img_list and ids_img:
-            return None, "All the image id exists!"
         log.error(e)
         return None, "Error with {}".format(e)
