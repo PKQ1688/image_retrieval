@@ -37,25 +37,24 @@ def init_conn():
         cursor = conn.cursor()
 
 
-@app.route('/addImages', methods=['GET'])
+@app.route('/addImages', methods=['POST'])
 def do_insert_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
-        add_argument('FileId', type=str). \
-        add_argument('FileImage', type=str). \
+
+        add_argument('Size', type=int). \
+        add_argument('Table', type=str). \
         parse_args()
-    file_id = args['FileId']
-    file_image = args['FileImage']
-    if file_id and file_image:
-        print("file:",file_id, file_image)
-        with open(file_id) as fid:
-            ids = fid.read().strip().split(",")
-            # ids = ids[:-1]
-        with open(file_image) as fimg:
-            image = fimg.read().strip().split(",")
-            # image = image[:-1]
-        print(ids, len(image))
+    file_id = request.files.get('FileId', "")
+    file_image = request.files.get('FileImage', "")
+
+    size = args['Size']
+    table_name = args['Table']
+    if file_id:
+        ids = str(file_id.read().decode("utf-8")).strip().split(",")
+        ids = ids[:-1]
+
     else:
         ids = args['Id'].split(",")
         image = args['Image'].split(",")
@@ -63,55 +62,68 @@ def do_insert_images_api():
     # image = args['Image'].split(",")
     try:
         init_conn()
-        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image)
+        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
 
 
-@app.route('/deleteImages', methods=['GET'])
+@app.route('/deleteImages', methods=['POST'])
 def do_delete_images_api():
     args = reqparse.RequestParser(). \
+        add_argument('Table', type=str). \
         add_argument('Id', type=str). \
         parse_args()
-    ids = args['Id'].split(",")
+
+    table_name = args['Table']
+    file_id = request.files.get('FileId', "")
+
+    if file_id:
+        ids = str(file_id.read().decode("utf-8")).strip().split(",")
+        ids = ids[:-1]
+    else:
+        ids = args['Id'].split(",")
+
     try:
         init_conn()
-        status, info = do_delete(index_client, conn, cursor, ids)
+        status, info = do_delete(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
         return "Error with {}".format(e), 400
 
 
-@app.route('/countImages', methods=['GET'])
+@app.route('/countImages', methods=['POST'])
 def do_count_images_api():
     try:
+        args = reqparse.RequestParser(). \
+            add_argument('Table', type=str). \
+            parse_args()
+        table_name = args['Table']
         init_conn()
-        rows = do_count()
+        rows = do_count(table_name)
         return "{}".format(rows), 200
     except Exception as e:
         return "Error with {}".format(e), 400
 
 
-@app.route('/getSimilarImages', methods=['GET'])
+@app.route('/getSimilarImages', methods=['POST'])
 def do_search_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
+        add_argument('Table', type=str). \
         add_argument('Image', type=str). \
         add_argument('FileId', type=str). \
         add_argument('FileImage', type=str). \
         parse_args()
-    file_id = args['FileId']
-    file_image = args['FileImage']
-    if file_id and file_image:
-        print("file:",file_id, file_image)
-        with open(file_id) as fid:
-            ids = fid.read().strip().split(",")
-            # ids = ids[:-1]
-        with open(file_image) as fimg:
-            image = fimg.read().strip().split(",")
-            # image = image[:-1]
-        print(ids, len(image))
+
+    file_id = request.files.get('FileId', "")
+    file_image = request.files.get('FileImage', "")
+    table_name = args['Table']
+
+    if file_id:
+        ids = str(file_id.read().decode("utf-8")).strip().split(",")
+        ids = ids[:-1]
+
     else:
         ids = args['Id'].split(",")
         image = args['Image'].split(",")
@@ -119,8 +131,17 @@ def do_search_images_api():
     # image = args['Image'].split(",")
     try:
         init_conn()
-        result = do_search(index_client, conn, cursor, img_to_vec, image)
-        return "{0},{1}".format(ids, result)
+
+        result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
+
+        # with open("results_0630.txt","w") as f:
+        #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
+        #    f.write("\n")
+        #    for i in result:
+        #        f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
+
+        return "{0},{1}".format(ids, result), 200
+
     except Exception as e:
         return "Error with {}".format(e), 400
 
