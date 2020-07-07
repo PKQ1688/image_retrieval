@@ -42,11 +42,13 @@ def do_insert_images_api():
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
         add_argument('Size', type=int). \
+        add_argument('Table', type=str). \
         parse_args()
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
 
     size = args['Size']
+    table_name = args['Table']
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
@@ -61,7 +63,7 @@ def do_insert_images_api():
 
     try:
         init_conn()
-        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size)
+        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -70,8 +72,10 @@ def do_insert_images_api():
 @app.route('/deleteImages', methods=['POST'])
 def do_delete_images_api():
     args = reqparse.RequestParser(). \
+        add_argument('Table', type=str). \
         add_argument('Id', type=str). \
         parse_args()
+    table_name = args['Table']
     file_id = request.files.get('FileId', "")
 
     if file_id:
@@ -82,7 +86,7 @@ def do_delete_images_api():
 
     try:
         init_conn()
-        status, info = do_delete(index_client, conn, cursor, ids)
+        status, info = do_delete(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -91,8 +95,12 @@ def do_delete_images_api():
 @app.route('/countImages', methods=['POST'])
 def do_count_images_api():
     try:
+        args = reqparse.RequestParser(). \
+            add_argument('Table', type=str). \
+            parse_args()
+        table_name = args['Table']
         init_conn()
-        rows = do_count()
+        rows = do_count(table_name)
         return "{}".format(rows), 200
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -102,10 +110,12 @@ def do_count_images_api():
 def do_search_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
+        add_argument('Table', type=str). \
         add_argument('Image', type=str). \
         parse_args()
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
+    table_name = args['Table']
 
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
@@ -121,7 +131,7 @@ def do_search_images_api():
 
     try:
         init_conn()
-        result = do_search(index_client, conn, cursor, img_to_vec, image)
+        result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
 
         # with open("results_0630.txt","w") as f:
         #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
