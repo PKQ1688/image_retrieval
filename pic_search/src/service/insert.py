@@ -50,7 +50,12 @@ def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_i
         load_data_to_mysql(conn, cursor, table_name)
 
 
-def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size=200, table_name=DEFAULT_TABLE):
+def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, table_name):
+    if not table_name:
+        table_name = DEFAULT_TABLE
+    if not size:
+        size = 200
+
     if len(ids_image)!= len(img):
         return "The number of pictures is not consistent with the ID number, please check!", None
     init_table(index_client, conn, cursor, table_name)

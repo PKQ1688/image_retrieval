@@ -5,9 +5,11 @@ from indexer.index import milvus_client, delete_vectors
 from indexer.tools import connect_mysql, search_by_image_id, delete_data
 
 
-def do_delete(index_client, conn, cursor, ids_images, table_name=DEFAULT_TABLE):
+def do_delete(index_client, conn, cursor, ids_images, table_name):
     info = []
     ids_milvus_list = []
+    if not table_name:
+        table_name = DEFAULT_TABLE
     for ids in ids_images:
         ids_milvus = search_by_image_id(conn, cursor, ids)
         if not ids_milvus:

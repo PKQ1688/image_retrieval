@@ -6,7 +6,9 @@ from encoder.encode import Img2Vec
 import time
 
 
-def do_search(index_client, conn, cursor, img_to_vec, img_list, table_name=DEFAULT_TABLE):
+def do_search(index_client, conn, cursor, img_to_vec, img_list, table_name):
+    if not table_name:
+        table_name = DEFAULT_TABLE
     vectors_img = img_to_vec(img_list)
 
     status, ids_milvus = search_vectors(index_client, table_name, vectors_img)
