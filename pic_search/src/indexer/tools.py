@@ -1,5 +1,5 @@
 import logging as log
-from common.config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PWD, MYSQL_DB, table_name, FILE_NAME
+from common.config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PWD, MYSQL_DB, FILE_NAME
 import pymysql
 
 
