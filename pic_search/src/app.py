@@ -42,7 +42,6 @@ def do_insert_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
-
         add_argument('Size', type=int). \
         add_argument('Table', type=str). \
         parse_args()
@@ -147,6 +146,5 @@ def do_search_images_api():
 
 
 if __name__ == "__main__":
-
     app.run(host="0.0.0.0",port=5000)
 
