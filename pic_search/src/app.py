@@ -1,6 +1,6 @@
 import os
 import logging
-from common.config import DEFAULT_TABLE
+from common.config import DATA_PATH, DEFAULT_TABLE
 from service.insert import do_insert
 from service.search import do_search
 from service.count import do_count
@@ -15,6 +15,7 @@ from indexer.tools import connect_mysql
 import time
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = DATA_PATH
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
@@ -41,25 +42,27 @@ def do_insert_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
         add_argument('Image', type=str). \
+
+        add_argument('Size', type=int). \
+        add_argument('Table', type=str). \
         parse_args()
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
 
+    size = args['Size']
+    table_name = args['Table']
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
+
     else:
         ids = args['Id'].split(",")
-
-    if file_image:
-        image = str(file_image.read().decode("utf-8")).strip().split(",")
-        image = image[:-1]
-    else:
         image = args['Image'].split(",")
-
+    # ids = args['Id'].split(",")
+    # image = args['Image'].split(",")
     try:
         init_conn()
-        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image)
+        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -68,8 +71,11 @@ def do_insert_images_api():
 @app.route('/deleteImages', methods=['POST'])
 def do_delete_images_api():
     args = reqparse.RequestParser(). \
+        add_argument('Table', type=str). \
         add_argument('Id', type=str). \
         parse_args()
+
+    table_name = args['Table']
     file_id = request.files.get('FileId', "")
 
     if file_id:
@@ -80,7 +86,7 @@ def do_delete_images_api():
 
     try:
         init_conn()
-        status, info = do_delete(index_client, conn, cursor, ids)
+        status, info = do_delete(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -89,8 +95,12 @@ def do_delete_images_api():
 @app.route('/countImages', methods=['POST'])
 def do_count_images_api():
     try:
+        args = reqparse.RequestParser(). \
+            add_argument('Table', type=str). \
+            parse_args()
+        table_name = args['Table']
         init_conn()
-        rows = do_count()
+        rows = do_count(table_name)
         return "{}".format(rows), 200
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -100,26 +110,29 @@ def do_count_images_api():
 def do_search_images_api():
     args = reqparse.RequestParser(). \
         add_argument('Id', type=str). \
+        add_argument('Table', type=str). \
         add_argument('Image', type=str). \
+        add_argument('FileId', type=str). \
+        add_argument('FileImage', type=str). \
         parse_args()
+
     file_id = request.files.get('FileId', "")
     file_image = request.files.get('FileImage', "")
+    table_name = args['Table']
 
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
+
     else:
         ids = args['Id'].split(",")
-
-    if file_image:
-        image = str(file_image.read().decode("utf-8")).strip().split(",")
-        image = image[:-1]
-    else:
         image = args['Image'].split(",")
-
+    # ids = args['Id'].split(",")
+    # image = args['Image'].split(",")
     try:
         init_conn()
-        result = do_search(index_client, conn, cursor, img_to_vec, image)
+
+        result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
 
         # with open("results_0630.txt","w") as f:
         #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
@@ -128,9 +141,12 @@ def do_search_images_api():
         #        f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
 
         return "{0},{1}".format(ids, result), 200
+
     except Exception as e:
         return "Error with {}".format(e), 400
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+
+    app.run(host="0.0.0.0",port=5000)
+
