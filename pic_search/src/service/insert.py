@@ -61,7 +61,7 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
         return "The number of pictures is not consistent with the ID number, please check!", None
     init_table(index_client, conn, cursor, table_name)
     img_list, ids_img, info = get_img_ids(conn, cursor, ids_image, img, table_name)
-    print("len:", len(img_list))
+    print("num of the insert images:", len(img_list))
     if not img_list:
         return None, "All the image id exists!"
     try:
@@ -70,11 +70,12 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
             insert_img_list = img_list[i:i+size]
             insert_ids_img = ids_img[i:i+size]
             i = i+size
-            print("insert size:", size, "the len of insert:", len(insert_img_list))
+            print("doing insert, size:", size, "the len of insert:", len(insert_img_list))
             status = insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_ids_img, table_name)
         else:
             insert_img_list = img_list[i:len(ids_image)]
             insert_ids_img = ids_img[i:len(ids_image)]
+            print("doing insert, size:", size, "the len of insert:", len(insert_img_list))
             status = insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_ids_img, table_name)
 
         return status, info

@@ -9,7 +9,8 @@ def do_search(index_client, conn, cursor, img_to_vec, img_list, table_name):
     if not table_name:
         table_name = DEFAULT_TABLE
     vectors_img = img_to_vec(img_list)
-
+    print("the num of search images:", len(vectors_image))
+    print("doing search, table_name:", table_name)
     status, ids_milvus = search_vectors(index_client, table_name, vectors_img)
 
     re_ids_img = []

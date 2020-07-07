@@ -14,10 +14,12 @@ def do_delete(index_client, conn, cursor, ids_images, table_name):
         ids_milvus = search_by_image_id(conn, cursor, ids, table_name)
         if not ids_milvus:
             info.append(ids)
+            print("the ids dose not exists:", ids)
         else:
             ids_milvus_list.append(ids_milvus[0])
 
     ids_milvus = list(map(int, ids_milvus_list))
+    print("doing delete, table_name:", table_name)
     status = delete_vectors(index_client, table_name, ids_milvus)
 
     if status:
