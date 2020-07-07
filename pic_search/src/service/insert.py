@@ -55,6 +55,7 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
         table_name = DEFAULT_TABLE
     if not size:
         size = 200
+    print("size:", size, "table_name:", table_name, len(ids_image), len(img))
 
     if len(ids_image)!= len(img):
         return "The number of pictures is not consistent with the ID number, please check!", None
