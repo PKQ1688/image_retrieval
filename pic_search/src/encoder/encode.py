@@ -10,6 +10,7 @@ from PIL import Image
 from io import BytesIO
 
 from numpy import linalg as LA
+import logging as log
 
 
 class Img2Vec(object):
@@ -74,7 +75,10 @@ class Img2Vec(object):
 
         # print(feature_vector.shape)
         feature_vector = feature_vector.tolist()
+
         # feature_list = [feat.tolist() for feat in feature_vector]
+        log.info("--------------encode--------------:feature_vector")
+        log.info(feature_vector)
         return feature_vector
 
         # norm_feat_list = list()
