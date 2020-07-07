@@ -13,7 +13,7 @@ def get_img_ids(conn, cursor, ids_image, img):
     info = []
 
     for i in range(len(ids_image)):
-        has_id = search_by_image_id(conn, cursor, ids_image[i])
+        has_id = search_by_image_id(conn, cursor, ids_image[i], table_name)
         if has_id:
             print("The id of image has exists:", ids_image[i])
             info.append(ids_image[i])
@@ -38,7 +38,7 @@ def init_table(index_client, conn, cursor, table_name):
         print("create table.")
         create_table(index_client, table_name)
         create_index(index_client, table_name)
-        create_table_mysql(conn, cursor)
+        create_table_mysql(conn, cursor, table_name)
 
 
 def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_ids_img, table_name):
