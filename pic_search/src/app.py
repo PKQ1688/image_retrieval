@@ -12,7 +12,7 @@ from encoder.encode import Img2Vec
 from indexer.index import milvus_client
 from indexer.tools import connect_mysql
 import time
-import eventlet
+
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
