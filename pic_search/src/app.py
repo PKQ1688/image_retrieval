@@ -56,12 +56,15 @@ def do_insert_images_api():
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
-
     else:
         ids = args['Id'].split(",")
+
+    if file_image:
+        image = str(file_image.read().decode("utf-8")).strip().split(",")
+        image = image[:-1]
+    else:
         image = args['Image'].split(",")
-    # ids = args['Id'].split(",")
-    # image = args['Image'].split(",")
+
     try:
         init_conn()
         get_insert_timeout(len(ids))
@@ -129,6 +132,11 @@ def do_search_images_api():
         ids = ids[:-1]
     else:
         ids = args['Id'].split(",")
+
+    if file_image:
+        image = str(file_image.read().decode("utf-8")).strip().split(",")
+        image = image[:-1]
+    else:
         image = args['Image'].split(",")
 
     try:
