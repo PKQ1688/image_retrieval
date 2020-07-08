@@ -4,15 +4,6 @@ from indexer.index import milvus_client, create_table, insert_vectors, create_in
 from indexer.tools import connect_mysql, create_table_mysql, search_by_image_id, load_data_to_mysql
 import datetime
 import time
-from indexer.timeout_timer import set_timeout
-from indexer.timeout_timer import after_timeout
-
-time_limit = 10
-
-def get_insert_timeout(num):
-    global time_limit
-    time_limit = num*10
-    print("time_limit", time_limit)
 
 
 def get_img_ids(conn, cursor, ids_image, img, table_name):
@@ -58,7 +49,7 @@ def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_i
         load_data_to_mysql(conn, cursor, table_name)
         return status
 
-@set_timeout(time_limit, after_timeout)
+
 def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, table_name):
     if not table_name:
         table_name = DEFAULT_TABLE

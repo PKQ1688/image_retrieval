@@ -1,9 +1,9 @@
 import os
 import logging
-from service.insert import do_insert, get_insert_timeout
-from service.search import do_search, get_search_timeout
+from service.insert import do_insert
+from service.search import do_search
 from service.count import do_count
-from service.delete import do_delete, get_delete_timeout
+from service.delete import do_delete
 from flask_cors import CORS
 from flask import Flask, request, send_file, jsonify
 from flask_restful import reqparse
@@ -12,6 +12,7 @@ from encoder.encode import Img2Vec
 from indexer.index import milvus_client
 from indexer.tools import connect_mysql
 import time
+import eventlet
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
@@ -67,8 +68,9 @@ def do_insert_images_api():
 
     try:
         init_conn()
-        get_insert_timeout(len(ids))
-        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
+        eventlet.monkey_patch()
+        with eventlet.Timeout(len(ids)*10,False):
+            status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
@@ -92,7 +94,6 @@ def do_delete_images_api():
 
     try:
         init_conn()
-        get_delete_timeout(len(ids))
         status, info = do_delete(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
@@ -141,7 +142,6 @@ def do_search_images_api():
 
     try:
         init_conn()
-        get_search_timeout(len(ids))
         result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
 
         # with open("results_0630.txt","w") as f:

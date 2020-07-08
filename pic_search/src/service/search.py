@@ -3,16 +3,8 @@ from common.config import DEFAULT_TABLE
 from indexer.index import milvus_client, search_vectors, get_vector_by_ids
 from indexer.tools import connect_mysql, search_by_milvus_ids
 import time
-from indexer.timeout_timer import set_timeout
-from indexer.timeout_timer import after_timeout
 
-time_limit = 10
 
-def get_search_timeout(num):
-    global time_limit
-    time_limit = num*10
-
-@set_timeout(time_limit, after_timeout)
 def do_search(index_client, conn, cursor, img_to_vec, img_list, table_name):
     if not table_name:
         table_name = DEFAULT_TABLE
