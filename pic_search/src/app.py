@@ -32,13 +32,13 @@ def init_conn():
         index_client.ping()
     except:
         index_client = milvus_client()
-        print("Milvus server is unreachable, reconnect...", index_client.ping())
+        print("Milvus server is unreachable, reconnect....", index_client.ping())
     try:
         conn.ping()
     except:
         conn = connect_mysql()
         cursor = conn.cursor()
-        print("Mysql server is unreachable, reconnect...", conn.ping())
+        print("Mysql server is unreachable, reconnect....", conn.ping())
 
 
 @app.route('/addImages', methods=['POST'])
