@@ -1,9 +1,9 @@
 import os
 import logging
-from service.insert import do_insert
-from service.search import do_search
+from service.insert import do_insert, get_insert_timeout
+from service.search import do_search, get_search_timeout
 from service.count import do_count
-from service.delete import do_delete
+from service.delete import do_delete, get_delete_timeout
 from flask_cors import CORS
 from flask import Flask, request, send_file, jsonify
 from flask_restful import reqparse
@@ -26,13 +26,18 @@ img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 def init_conn():
     global index_client
     global conn
-    if index_client and conn:
-        return
-    if not index_client:
+    global cursor
+    try:
+        index_client.ping()
+    except:
         index_client = milvus_client()
-    elif not conn:
+        print("Milvus server is unreachable, reconnect...", index_client.ping())
+    try:
+        conn.ping()
+    except:
         conn = connect_mysql()
         cursor = conn.cursor()
+        print("Mysql server is unreachable, reconnect...", conn.ping())
 
 
 @app.route('/addImages', methods=['POST'])
@@ -59,6 +64,7 @@ def do_insert_images_api():
     # image = args['Image'].split(",")
     try:
         init_conn()
+        get_insert_timeout(len(ids))
         status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
@@ -83,6 +89,7 @@ def do_delete_images_api():
 
     try:
         init_conn()
+        get_delete_timeout(len(ids))
         status, info = do_delete(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
@@ -120,15 +127,13 @@ def do_search_images_api():
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
-
     else:
         ids = args['Id'].split(",")
         image = args['Image'].split(",")
-    # ids = args['Id'].split(",")
-    # image = args['Image'].split(",")
+
     try:
         init_conn()
-
+        get_search_timeout(len(ids))
         result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
 
         # with open("results_0630.txt","w") as f:

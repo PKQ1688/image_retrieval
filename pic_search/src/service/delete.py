@@ -3,8 +3,18 @@ import time
 from common.config import DEFAULT_TABLE
 from indexer.index import milvus_client, delete_vectors
 from indexer.tools import connect_mysql, search_by_image_id, delete_data
+import time
+from indexer.timeout_timer import set_timeout
+from indexer.timeout_timer import after_timeout
+
+time_limit = 10
+
+def get_delete_timeout(num):
+    global time_limit
+    time_limit = num*10
 
 
+@set_timeout(time_limit, after_timeout)
 def do_delete(index_client, conn, cursor, ids_images, table_name):
     info = []
     ids_milvus_list = []

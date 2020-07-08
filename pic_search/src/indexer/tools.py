@@ -9,6 +9,7 @@ def connect_mysql():
         conn = pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,port=MYSQL_PORT,password=MYSQL_PWD,database=MYSQL_DB, local_infile=True)
         return conn
     except Exception as e:
+        print("ERROR:", sql)
         log.error(e)
 
 
@@ -18,6 +19,7 @@ def create_table_mysql(conn,cursor, table_name):
         cursor.execute(sql)
         print("create table")
     except Exception as e:
+        print("ERROR:", sql)
         log.error(e)
 
 
@@ -31,6 +33,7 @@ def search_by_milvus_ids(conn, cursor, ids, table_name):
         results = [res[0] for res in results]
         return results
     except Exception as e:
+        print("ERROR:", sql)
         log.error(e)
 
 
@@ -45,6 +48,7 @@ def search_by_image_id(conn, cursor, image_id, table_name):
         else:
             return None
     except Exception as e:
+        print("ERROR:", sql)
         log.error(e)
 
 
