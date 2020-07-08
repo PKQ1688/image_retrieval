@@ -64,7 +64,14 @@ class Img2Vec(object):
         return feature_vector
 
     def __call__(self, base64list):
-        img_list = [self.base64_pil(base64img) for base64img in base64list]
+        # img_list = [self.base64_pil(base64img) for base64img in base64list]
+        img_list = list()
+        for base64img in base64list:
+            try:
+                img_pil = self.base64_pil(base64img)
+                img_list.append(img_pil)
+            except Exception as e:
+                print(e)
 
         img_list = [img.convert("RGB") for img in img_list]
         img_list = [self.transform(img) for img in img_list]
