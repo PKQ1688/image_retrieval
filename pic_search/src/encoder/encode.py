@@ -23,7 +23,7 @@ class Img2Vec(object):
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = models.vgg16(pretrained=True).features
+        self.model = models.vgg16(pretrained=False).features
         if model_path is not None:
             model_dict = self.model.state_dict()
             pre_model = torch.load(model_path)
@@ -105,14 +105,16 @@ if __name__ == '__main__':
         return encodestr
 
 
-    img_path_1 = "test_pic/1.png"
-    img_path_2 = "test_pic/2.png"
-    img_path_3 = "test_pic/3.png"
+    # img_path_1 = "test_pic/1.png"
+    # img_path_2 = "test_pic/2.png"
+    # img_path_3 = "test_pic/3.png"
+    img_path = "/home/shizai/datadisk5/cv/image_retrieval/taiji_test/ae4439bccd9c27bdb6e271216efcd10b.JPEG"
 
     img_list = list()
-    img_list.append(path2base64(img_path_1))
-    img_list.append(path2base64(img_path_2))
-    img_list.append(path2base64(img_path_3))
+    # img_list.append(path2base64(img_path_1))
+    # img_list.append(path2base64(img_path_2))
+    # img_list.append(path2base64(img_path_3))
+    img_list.append(path2base64(img_path))
 
     img_to_vec = Img2Vec()
 
