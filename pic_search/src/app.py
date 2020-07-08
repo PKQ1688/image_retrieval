@@ -68,9 +68,7 @@ def do_insert_images_api():
 
     try:
         init_conn()
-        eventlet.monkey_patch()
-        with eventlet.Timeout(3,False):
-            status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
+        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
