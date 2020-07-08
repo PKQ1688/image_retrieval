@@ -28,14 +28,10 @@ def init_conn():
     global index_client
     global conn
     global cursor
-    try:
-        index_client.ping()
-    except:
+    if not index_client:
         index_client = milvus_client()
         print("Milvus server is unreachable, reconnect...", index_client.ping())
-    try:
-        conn.ping()
-    except:
+    if not conn:
         conn = connect_mysql()
         cursor = conn.cursor()
         print("Mysql server is unreachable, reconnect...", conn.ping())
@@ -68,9 +64,7 @@ def do_insert_images_api():
 
     try:
         init_conn()
-        eventlet.monkey_patch()
-        with eventlet.Timeout(len(ids)*10,False):
-            status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
+        status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
         return "Error with {}".format(e), 400
