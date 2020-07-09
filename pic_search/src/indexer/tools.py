@@ -1,6 +1,7 @@
 import logging as log
 from common.config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PWD, MYSQL_DB, FILE_NAME
 import pymysql
+from indexer.logs import write_log
 
 
 def connect_mysql():
@@ -10,7 +11,7 @@ def connect_mysql():
         return conn
     except Exception as e:
         print("ERROR:", sql)
-        log.error(e)
+        write_log(e)
 
 
 def create_table_mysql(conn,cursor, table_name):
@@ -20,7 +21,7 @@ def create_table_mysql(conn,cursor, table_name):
         print("create table")
     except Exception as e:
         print("ERROR:", sql)
-        log.error(e)
+        write_log(e)
 
 
 def search_by_milvus_ids(conn, cursor, ids, table_name):
@@ -34,7 +35,7 @@ def search_by_milvus_ids(conn, cursor, ids, table_name):
         return results
     except Exception as e:
         print("ERROR:", sql)
-        log.error(e)
+        write_log(e)
 
 
 def search_by_image_id(conn, cursor, image_id, table_name):
@@ -49,7 +50,7 @@ def search_by_image_id(conn, cursor, image_id, table_name):
             return None
     except Exception as e:
         print("ERROR:", sql)
-        log.error(e)
+        write_log(e)
 
 
 

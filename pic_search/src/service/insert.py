@@ -4,6 +4,7 @@ from indexer.index import milvus_client, create_table, insert_vectors, create_in
 from indexer.tools import connect_mysql, create_table_mysql, search_by_image_id, load_data_to_mysql
 import datetime
 import time
+from indexer.logs import write_log
 
 
 def get_img_ids(conn, cursor, ids_image, img, table_name):
@@ -80,5 +81,6 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
 
         return status, info
     except Exception as e:
-        log.error(e)
+        # log.error(e)
+        write_log(e)
         return None, "Error with {}".format(e)

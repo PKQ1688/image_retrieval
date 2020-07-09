@@ -11,6 +11,7 @@ from werkzeug.utils import secure_filename
 from encoder.encode import Img2Vec
 from indexer.index import milvus_client
 from indexer.tools import connect_mysql
+from indexer.logs import write_log
 import time
 
 
