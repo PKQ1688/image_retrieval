@@ -94,7 +94,7 @@ class MultiprocessHandler(logging.FileHandler):
             self.stream = self._open()
         #删除多于保留个数的所有日志文件
         if self.backupCount > 0:
-            print('删除日志')
+            print('-----------delete backup logs------------')
             for s in self.getFilesToDelete():
                 print(s)
                 os.remove(s)
@@ -155,7 +155,7 @@ def write_log(log_message, level=0):
 
 
     log_name = "app.log"
-    file_handler = MultiprocessHandler(log_name, when='M')
+    file_handler = MultiprocessHandler(log_name, when='D', backupCount=7)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(fmt)
 
