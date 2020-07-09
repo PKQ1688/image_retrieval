@@ -143,26 +143,29 @@ class MultiprocessHandler(logging.FileHandler):
             self.handleError(record)
 
 
-def write_log(log_message):
+def write_log(log_message, level=0):
     logger = logging.getLogger()
-    formattler = '%(asctime)s - thread-%(thread)-8d - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s'
+    # formattler = '%(asctime)s - thread-%(thread)-8d - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s'
+    formattler = '%(asctime)s - %(levelname)s - %(message)s'
     fmt = logging.Formatter(formattler)
 
     stream_handler = logging.StreamHandler(sys.stdout)
-    stream_handler.setLevel(logging.ERROR)
+    stream_handler.setLevel(logging.INFO)
     stream_handler.setFormatter(fmt)
 
 
     log_name = "app.log"
     file_handler = MultiprocessHandler(log_name, when='M')
-    file_handler.setLevel(logging.ERROR)
+    file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(fmt)
 
 
     logger.addHandler(stream_handler)
     logger.addHandler(file_handler)
-
-    logger.error(log_message)
+    if level:
+        logger.error(log_message)
+    else:
+        logger.info(log_message)
 
 
 # mess = "this is a error log messages"

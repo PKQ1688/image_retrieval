@@ -82,5 +82,5 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
         return status, info
     except Exception as e:
         # log.error(e)
-        write_log(e)
+        write_log(e, 1)
         return None, "Error with {}".format(e)

@@ -11,7 +11,7 @@ def connect_mysql():
         return conn
     except Exception as e:
         print("ERROR:", sql)
-        write_log(e)
+        write_log(e,1)
 
 
 def create_table_mysql(conn,cursor, table_name):
@@ -21,7 +21,7 @@ def create_table_mysql(conn,cursor, table_name):
         print("create table")
     except Exception as e:
         print("ERROR:", sql)
-        write_log(e)
+        write_log(e,1)
 
 
 def search_by_milvus_ids(conn, cursor, ids, table_name):
@@ -35,7 +35,7 @@ def search_by_milvus_ids(conn, cursor, ids, table_name):
         return results
     except Exception as e:
         print("ERROR:", sql)
-        write_log(e)
+        write_log(e,1)
 
 
 def search_by_image_id(conn, cursor, image_id, table_name):
@@ -50,7 +50,7 @@ def search_by_image_id(conn, cursor, image_id, table_name):
             return None
     except Exception as e:
         print("ERROR:", sql)
-        write_log(e)
+        write_log(e,1)
 
 
 
