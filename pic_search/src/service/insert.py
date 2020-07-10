@@ -6,6 +6,7 @@ import datetime
 import time
 from indexer.logs import write_log
 import random
+import os
 
 def get_img_ids(conn, cursor, ids_image, img, table_name):
     img_list = []
@@ -50,7 +51,10 @@ def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_i
         randomNum = random.randint(0, 100)
         file_name = str(nowTime) + str(randomNum) + ".csv"
         get_ids_file(ids_milvus, insert_ids_img, file_name)
+        print("load data to mysql:", file_name)
         load_data_to_mysql(conn, cursor, table_name, file_name)
+        if os.path.exists(file_name):
+            os.remove(file_name)
         return status
 
 
