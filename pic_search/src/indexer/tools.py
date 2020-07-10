@@ -10,7 +10,7 @@ def connect_mysql():
         conn = pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,port=MYSQL_PORT,password=MYSQL_PWD,database=MYSQL_DB, local_infile=True)
         return conn
     except Exception as e:
-        print("MYSQL ERROR:", connect failed)
+        print("MYSQL ERROR: connect failed")
         write_log(e,1)
 
 
