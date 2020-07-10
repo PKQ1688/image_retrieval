@@ -45,7 +45,7 @@ def create_index(client, table_name):
         write_log(e,1)
 
 
-def delete_table(client, table_name):
+def delete_collection(client, table_name):
     try:
         status = client.drop_collection(collection_name=table_name)
         return status

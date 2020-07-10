@@ -3,7 +3,7 @@ import logging
 from service.insert import do_insert
 from service.search import do_search
 from service.count import do_count
-from service.delete import do_delete
+from service.delete import do_delete_images, do_delete_table
 from flask_cors import CORS
 from flask import Flask, request, send_file, jsonify
 from flask_restful import reqparse
@@ -72,6 +72,7 @@ def do_insert_images_api():
         status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
+        write_log(e, 1)
         return "Error with {}".format(e), 400
 
 
@@ -93,9 +94,10 @@ def do_delete_images_api():
 
     try:
         init_conn()
-        status, info = do_delete(index_client, conn, cursor, ids, table_name)
+        status, info = do_delete_images(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
+        write_log(e, 1)
         return "Error with {}".format(e), 400
 
 
@@ -110,6 +112,22 @@ def do_count_images_api():
         rows = do_count(table_name)
         return "{}".format(rows), 200
     except Exception as e:
+        write_log(e, 1)
+        return "Error with {}".format(e), 400
+
+
+@app.route('/deleteTable', methods=['POST'])
+def do_delete_table_api():
+    args = reqparse.RequestParser(). \
+        add_argument('Table', type=str). \
+        parse_args()
+    try:
+        init_conn()
+        table_name = args['Table']
+        status = do_delete_table(index_client, conn, cursor, table_name)
+        return "{}".format(status)
+    except Exception as e:
+        write_log(e, 1)
         return "Error with {}".format(e), 400
 
 
@@ -152,6 +170,7 @@ def do_search_images_api():
         return "{0},{1}".format(ids, result), 200
 
     except Exception as e:
+        write_log(e, 1)
         return "Error with {}".format(e), 400
 
 

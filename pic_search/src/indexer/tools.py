@@ -67,3 +67,14 @@ def delete_data(conn, cursor, image_id, table_name):
     sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
     cursor.execute(sql)
     conn.commit()
+
+
+def delete_table(conn, cursor, table_name):
+    sql = "drop table if exists " + table_name + ";"
+    try:
+        cursor.execute(sql)
+        print("delete table.")
+    except:
+        conn.rollback()
+        print("ERROR:", sql)
+        write_log(e,1)
