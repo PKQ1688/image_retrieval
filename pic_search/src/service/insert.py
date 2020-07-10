@@ -1,11 +1,11 @@
 import logging as log
-from common.config import DEFAULT_TABLE, FILE_NAME
+from common.config import DEFAULT_TABLE
 from indexer.index import milvus_client, create_table, insert_vectors, create_index, has_table
 from indexer.tools import connect_mysql, create_table_mysql, search_by_image_id, load_data_to_mysql
 import datetime
 import time
 from indexer.logs import write_log
-
+import random
 
 def get_img_ids(conn, cursor, ids_image, img, table_name):
     img_list = []
@@ -25,8 +25,8 @@ def get_img_ids(conn, cursor, ids_image, img, table_name):
     return img_list, ids_img, info
 
 
-def get_ids_file(ids_milvus, ids_image):
-    with open(FILE_NAME,'w') as f:
+def get_ids_file(ids_milvus, ids_image, file_name):
+    with open(file_name,'w') as f:
         for i in range(len(ids_image)):
             line = str(ids_milvus[i]) + "," + ids_image[i] + '\n'
             f.write(line)
@@ -46,8 +46,11 @@ def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_i
         # print(len(insert_img_list),len(insert_ids_img))
         status, ids_milvus = insert_vectors(index_client, table_name, vectors_img)
 
-        get_ids_file(ids_milvus, insert_ids_img)
-        load_data_to_mysql(conn, cursor, table_name)
+        nowTime = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        randomNum = random.randint(0, 100)
+        file_name = str(nowTime) + str(randomNum) + ".csv"
+        get_ids_file(ids_milvus, insert_ids_img, file_name)
+        load_data_to_mysql(conn, cursor, table_name, file_name)
         return status
 
 

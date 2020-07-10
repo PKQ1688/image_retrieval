@@ -15,5 +15,3 @@ MYSQL_PORT = os.getenv("MYSQL_PORT", 3306)
 MYSQL_USER = os.getenv("MYSQL_USER", "root")
 MYSQL_PWD = os.getenv("MYSQL_PWD", "123456")
 MYSQL_DB = os.getenv("MYSQL_DB", "mysql")
-
-FILE_NAME = os.getenv("FILE_NAME", "milvus_images_ids.csv")
