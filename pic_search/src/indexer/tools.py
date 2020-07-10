@@ -10,7 +10,7 @@ def connect_mysql():
         conn = pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,port=MYSQL_PORT,password=MYSQL_PWD,database=MYSQL_DB, local_infile=True)
         return conn
     except Exception as e:
-        # print("ERROR:", sql)
+        print("MYSQL ERROR:", connect failed)
         write_log(e,1)
 
 
@@ -20,7 +20,7 @@ def create_table_mysql(conn,cursor, table_name):
         cursor.execute(sql)
         print("create table")
     except Exception as e:
-        print("ERROR:", sql)
+        print("MYSQL ERROR:", sql)
         write_log(e,1)
 
 
@@ -34,7 +34,7 @@ def search_by_milvus_ids(conn, cursor, ids, table_name):
         results = [res[0] for res in results]
         return results
     except Exception as e:
-        print("ERROR:", sql)
+        print("MYSQL ERROR:", sql)
         write_log(e,1)
 
 
@@ -49,32 +49,40 @@ def search_by_image_id(conn, cursor, image_id, table_name):
         else:
             return None
     except Exception as e:
-        print("ERROR:", sql)
+        print("MYSQL ERROR:", sql)
         write_log(e,1)
 
 
 
 def load_data_to_mysql(conn, cursor, table_name, file_name):
-    sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
-    cursor.execute(sql)
-    conn.commit()
+    try:
+        sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
+        cursor.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print("MYSQL ERROR:", sql)
+        write_log(e,1)
 
 
 
 def delete_data(conn, cursor, image_id, table_name):
-    str_ids = [str(_id) for _id in image_id]
-    str_ids = str(str_ids).replace('[','').replace(']','')
-    sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
-    cursor.execute(sql)
-    conn.commit()
+    try:
+        str_ids = [str(_id) for _id in image_id]
+        str_ids = str(str_ids).replace('[','').replace(']','')
+        sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
+        cursor.execute(sql)
+        conn.commit()
+    except Exception as e:
+        print("MYSQL ERROR:", sql)
+        write_log(e,1)
 
 
 def delete_table(conn, cursor, table_name):
     sql = "drop table if exists " + table_name + ";"
     try:
         cursor.execute(sql)
-        print("delete table.")
+        print("MYSQL delete table.")
     except:
         conn.rollback()
-        print("ERROR:", sql)
+        print("MYSQL ERROR:", sql)
         write_log(e,1)

@@ -5,7 +5,7 @@ from indexer.tools import connect_mysql, create_table_mysql, search_by_image_id,
 import datetime
 import time
 from indexer.logs import write_log
-import random
+import uuid
 import os
 
 def get_img_ids(conn, cursor, ids_image, img, table_name):
@@ -47,9 +47,7 @@ def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_i
         # print(len(insert_img_list),len(insert_ids_img))
         status, ids_milvus = insert_vectors(index_client, table_name, vectors_img)
 
-        nowTime = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-        randomNum = random.randint(0, 100)
-        file_name = str(nowTime) + str(randomNum) + ".csv"
+        file_name = str(uuid.uuid1()) + ".csv"
         get_ids_file(ids_milvus, insert_ids_img, file_name)
         print("load data to mysql:", file_name)
         load_data_to_mysql(conn, cursor, table_name, file_name)
