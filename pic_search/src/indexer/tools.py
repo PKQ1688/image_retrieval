@@ -55,8 +55,8 @@ def search_by_image_id(conn, cursor, image_id, table_name):
 
 
 def load_data_to_mysql(conn, cursor, table_name, file_name):
+    sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
     try:
-        sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
         cursor.execute(sql)
         conn.commit()
     except Exception as e:
@@ -66,10 +66,10 @@ def load_data_to_mysql(conn, cursor, table_name, file_name):
 
 
 def delete_data(conn, cursor, image_id, table_name):
+    str_ids = [str(_id) for _id in image_id]
+    str_ids = str(str_ids).replace('[','').replace(']','')
+    sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
     try:
-        str_ids = [str(_id) for _id in image_id]
-        str_ids = str(str_ids).replace('[','').replace(']','')
-        sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
         cursor.execute(sql)
         conn.commit()
     except Exception as e:
@@ -84,5 +84,16 @@ def delete_table(conn, cursor, table_name):
         print("MYSQL delete table.")
     except:
         conn.rollback()
+        print("MYSQL ERROR:", sql)
+        write_log(e,1)
+
+
+def count_table(conn, cursor, table_name):
+    sql = "select count(*) from " + table_name + ";"
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        return results[0][0]
+    except Exception as e:
         print("MYSQL ERROR:", sql)
         write_log(e,1)
