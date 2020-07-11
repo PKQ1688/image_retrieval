@@ -19,27 +19,15 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
-conn = connect_mysql()
-cursor = conn.cursor()
-index_client = milvus_client()
+
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 
 
 def init_conn():
-    global index_client
-    global conn
-    global cursor
-    try:
-        index_client.ping()
-    except:
-        index_client = milvus_client()
-        print("Milvus server is unreachable, reconnect....", index_client.ping())
-    try:
-        conn.ping()
-    except:
-        conn = connect_mysql()
-        cursor = conn.cursor()
-        print("Mysql server is unreachable, reconnect....", conn.ping())
+    conn = connect_mysql()
+    cursor = conn.cursor()
+    index_client = milvus_client()
+    return index_client, conn, cursor
 
 
 @app.route('/addImages', methods=['POST'])
@@ -68,7 +56,7 @@ def do_insert_images_api():
         image = args['Image'].split(",")
 
     try:
-        init_conn()
+        index_client, conn, cursor = init_conn()
         status, info = do_insert(index_client, conn, cursor, img_to_vec, ids, image, size, table_name)
         return "{0},{1}".format(status, info)
     except Exception as e:
@@ -93,7 +81,7 @@ def do_delete_images_api():
         ids = args['Id'].split(",")
 
     try:
-        init_conn()
+        index_client, conn, cursor = init_conn()
         status, info = do_delete_images(index_client, conn, cursor, ids, table_name)
         return "{0},{1}".format(status, info), 200
     except Exception as e:
@@ -103,12 +91,12 @@ def do_delete_images_api():
 
 @app.route('/countImages', methods=['POST'])
 def do_count_images_api():
+    args = reqparse.RequestParser(). \
+        add_argument('Table', type=str). \
+        parse_args()
+    table_name = args['Table']
     try:
-        args = reqparse.RequestParser(). \
-            add_argument('Table', type=str). \
-            parse_args()
-        table_name = args['Table']
-        init_conn()
+        index_client, conn, cursor = init_conn()
         rows = do_count(table_name)
         return "{}".format(rows), 200
     except Exception as e:
@@ -122,7 +110,7 @@ def do_delete_table_api():
         add_argument('Table', type=str). \
         parse_args()
     try:
-        init_conn()
+        index_client, conn, cursor = init_conn()
         table_name = args['Table']
         status = do_delete_table(index_client, conn, cursor, table_name)
         return "{}".format(status)
@@ -158,7 +146,7 @@ def do_search_images_api():
         image = args['Image'].split(",")
 
     try:
-        init_conn()
+        index_client, conn, cursor = init_conn()
         result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
 
         # with open("results_0630.txt","w") as f:
