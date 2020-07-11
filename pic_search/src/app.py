@@ -19,7 +19,6 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
-
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 
 
