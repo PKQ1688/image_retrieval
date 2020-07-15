@@ -23,7 +23,7 @@ def add_images(folder_path, ip, port, basenum):
     for filename in folder_path:
         # print(filename)
         count = count + 1
-        print(count)
+        # print(count)
         with open(filename, 'rb') as f:
             image = f.read()
         encode_stream = str(base64.b64encode(image), 'utf-8')

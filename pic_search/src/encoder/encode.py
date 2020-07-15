@@ -9,9 +9,9 @@ import base64
 from PIL import Image
 from io import BytesIO
 
-from numpy import linalg as LA
-import logging as log
-
+# from numpy import linalg as LA
+# import logging as log
+from sklearn.preprocessing import normalize
 
 class Img2Vec(object):
     def __init__(self, model_path=None):
@@ -61,6 +61,7 @@ class Img2Vec(object):
         feature_vector = torch.squeeze(feature_vector, 2)
         feature_vector = feature_vector.data.cpu().numpy()
 
+        feature_vector = normalize(feature_vector, norm='l2')
         return feature_vector
 
     def __call__(self, base64list):
