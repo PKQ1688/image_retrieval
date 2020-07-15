@@ -10,7 +10,7 @@ def connect_mysql():
         conn = pymysql.connect(host=MYSQL_HOST,user=MYSQL_USER,port=MYSQL_PORT,password=MYSQL_PWD,database=MYSQL_DB, local_infile=True)
         return conn
     except Exception as e:
-        print("MYSQL ERROR: connect failed")
+        print("MYSQL ERROR: connect failed", e)
         write_log(e,1)
 
 
@@ -20,7 +20,7 @@ def create_table_mysql(conn,cursor, table_name):
         cursor.execute(sql)
         print("MYSQL create table.")
     except Exception as e:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
 
 
@@ -35,7 +35,7 @@ def search_by_milvus_ids(conn, cursor, ids, table_name):
         print("MYSQL search by milvus id.")
         return results
     except Exception as e:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
 
 
@@ -51,7 +51,7 @@ def search_by_image_id(conn, cursor, image_id, table_name):
         else:
             return None
     except Exception as e:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
 
 
@@ -63,7 +63,7 @@ def load_data_to_mysql(conn, cursor, table_name, file_name):
         conn.commit()
         print("MYSQL load table.")
     except Exception as e:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
 
 
@@ -77,7 +77,7 @@ def delete_data(conn, cursor, image_id, table_name):
         conn.commit()
         print("MYSQL delete data.")
     except Exception as e:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
 
 
@@ -87,7 +87,7 @@ def delete_table(conn, cursor, table_name):
         cursor.execute(sql)
         print("MYSQL delete table.")
     except:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
 
 
@@ -99,5 +99,5 @@ def count_table(conn, cursor, table_name):
         print("MYSQL count table.")
         return results[0][0]
     except Exception as e:
-        print("MYSQL ERROR:", sql)
+        print("MYSQL ERROR:", sql, e)
         write_log(e,1)
