@@ -14,10 +14,13 @@ def do_search(index_client, conn, cursor, img_to_vec, img_list, table_name):
     status, ids_milvus = search_vectors(index_client, table_name, vectors_img)
 
     re_ids_img = []
+    re_distance = []
     for ids in ids_milvus:
         vids = [x.id for x in ids]
+        dis = [x.distance for x in ids]
 
         re_ids = search_by_milvus_ids(conn, cursor, vids, table_name)
-
+        re_distance.append(dis)
         re_ids_img.append(re_ids)
-    return re_ids_img
+        
+    return re_ids_img, re_distance

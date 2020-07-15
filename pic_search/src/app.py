@@ -146,15 +146,31 @@ def do_search_images_api():
 
     try:
         index_client, conn, cursor = init_conn()
-        result = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
+        result, distance = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
 
+        # Python 字典类型转换为 JSON 对象
+        result_dic = {"code": 0,"msg": "success"}
+        data = []
+        re = {}
+        for i in range(len(ids)):
+            id_dis = {}
+            re["id"] = ids[i]
+            for j in range(len(result)):
+                id_dis["id"] = result[i][j]
+                id_dis["similarity"] = distance[i][j]
+            re["similarImages"] = id_dis
+
+        import json
+        result_dic["data"] = re    
+        result_json = json.dumps(result_dic)
         # with open("results_0630.txt","w") as f:
         #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
         #    f.write("\n")
         #    for i in result:
         #        f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
 
-        return "{0},{1}".format(ids, result), 200
+        # return "{0},{1}".format(ids, result), 200
+        return result_json, 200
 
     except Exception as e:
         write_log(e, 1)
