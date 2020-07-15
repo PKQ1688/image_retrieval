@@ -35,6 +35,7 @@ def get_ids_file(ids_milvus, ids_image, file_name):
 
 def init_table(index_client, conn, cursor, table_name):
     status, ok = has_table(index_client, table_name)
+    print("has_table:", status, ok)
     if not ok:
         print("create table.")
         create_table(index_client, table_name)

@@ -71,8 +71,8 @@ def search_vectors(client, table_name, vectors, top_k=TOP_K):
 
 def has_table(client, table_name):
     try:
-        status = client.has_collection(collection_name=table_name)
-        return status
+        status, ok = client.has_collection(collection_name=table_name)
+        return status, ok
     except Exception as e:
         print("Milvus ERROR:", e)
         write_log(e,1)
