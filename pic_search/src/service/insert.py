@@ -65,6 +65,7 @@ def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, tabl
 
     if len(ids_image)!= len(img):
         return "The number of pictures is not consistent with the ID number, please check!", None
+
     init_table(index_client, conn, cursor, table_name)
     img_list, ids_img, info = get_img_ids(conn, cursor, ids_image, img, table_name)
     print("num of the insert images:", len(img_list))

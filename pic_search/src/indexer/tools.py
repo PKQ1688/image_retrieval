@@ -18,7 +18,7 @@ def create_table_mysql(conn,cursor, table_name):
     sql = "create table if not exists " + table_name + "(milvus_id bigint, images_id varchar(30), index ix_milvus (milvus_id), index ix_images (images_id));"
     try:
         cursor.execute(sql)
-        print("create table")
+        print("MYSQL create table.")
     except Exception as e:
         print("MYSQL ERROR:", sql)
         write_log(e,1)
@@ -32,6 +32,7 @@ def search_by_milvus_ids(conn, cursor, ids, table_name):
         cursor.execute(sql)
         results = cursor.fetchall()
         results = [res[0] for res in results]
+        print("MYSQL search by milvus id.")
         return results
     except Exception as e:
         print("MYSQL ERROR:", sql)
@@ -43,6 +44,7 @@ def search_by_image_id(conn, cursor, image_id, table_name):
     try:
         cursor.execute(sql)
         results = cursor.fetchall()
+        print("MYSQL search by image id.")
         if len(results):
             results = [res[0] for res in results]
             return results
@@ -55,10 +57,11 @@ def search_by_image_id(conn, cursor, image_id, table_name):
 
 
 def load_data_to_mysql(conn, cursor, table_name, file_name):
+    sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
     try:
-        sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
         cursor.execute(sql)
         conn.commit()
+        print("MYSQL load table.")
     except Exception as e:
         print("MYSQL ERROR:", sql)
         write_log(e,1)
@@ -66,12 +69,13 @@ def load_data_to_mysql(conn, cursor, table_name, file_name):
 
 
 def delete_data(conn, cursor, image_id, table_name):
+    str_ids = [str(_id) for _id in image_id]
+    str_ids = str(str_ids).replace('[','').replace(']','')
+    sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
     try:
-        str_ids = [str(_id) for _id in image_id]
-        str_ids = str(str_ids).replace('[','').replace(']','')
-        sql = "delete from " + table_name + " where images_id in (" + str_ids + ");"
         cursor.execute(sql)
         conn.commit()
+        print("MYSQL delete data.")
     except Exception as e:
         print("MYSQL ERROR:", sql)
         write_log(e,1)
@@ -83,6 +87,17 @@ def delete_table(conn, cursor, table_name):
         cursor.execute(sql)
         print("MYSQL delete table.")
     except:
-        conn.rollback()
+        print("MYSQL ERROR:", sql)
+        write_log(e,1)
+
+
+def count_table(conn, cursor, table_name):
+    sql = "select count(milvus_id) from " + table_name + ";"
+    try:
+        cursor.execute(sql)
+        results = cursor.fetchall()
+        print("MYSQL count table.")
+        return results[0][0]
+    except Exception as e:
         print("MYSQL ERROR:", sql)
         write_log(e,1)

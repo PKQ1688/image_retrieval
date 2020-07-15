@@ -25,8 +25,8 @@ def do_delete_images(index_client, conn, cursor, ids_images, table_name):
 
     if status:
         delete_data(conn, cursor, ids_images, table_name)
-
     return status, info
+
 
 def do_delete_table(index_client, conn, cursor, table_name):
     if not table_name:

@@ -78,7 +78,7 @@ def has_table(client, table_name):
         write_log(e,1)
 
 
-def count_table(client, table_name):
+def count_collection(client, table_name):
     try:
         status, num = client.count_collection(collection_name=table_name)
         return num

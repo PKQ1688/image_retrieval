@@ -19,7 +19,6 @@ app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
-
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 
 
@@ -97,8 +96,8 @@ def do_count_images_api():
     table_name = args['Table']
     try:
         index_client, conn, cursor = init_conn()
-        rows = do_count(table_name)
-        return "{}".format(rows), 200
+        rows_milvus, rows_mysql = do_count(index_client, conn, cursor, table_name)
+        return "{0},{1}".format(rows_milvus, rows_mysql), 200
     except Exception as e:
         write_log(e, 1)
         return "Error with {}".format(e), 400
