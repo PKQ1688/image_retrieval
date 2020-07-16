@@ -154,10 +154,10 @@ def do_search_images_api():
         data = []
         for i in range(len(ids)):
             id_dis = []
-            for j in range(len(result)):
+            for j in range(len(result[i])):
                 id_sim = {
-                "id": result[j],
-                "similarity": distance[j]
+                "id": result[i][j],
+                "similarity": distance[i][j]
                 }
                 id_dis.append(id_sim)
             re_sim = {
@@ -166,10 +166,7 @@ def do_search_images_api():
             }
             data.append(re_sim)
 
-        print(id_dis, data)
-        import json
         result_dic["data"] = data
-        result_json = json.dumps(result_dic)
         # with open("results_0630.txt","w") as f:
         #    f.write(str(ids).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
         #    f.write("\n")
@@ -177,7 +174,7 @@ def do_search_images_api():
         #        f.write(str(i).replace('[','').replace(']','').replace('\'','').replace('‘','')+'\n')
 
         # return "{0},{1}".format(ids, result), 200
-        return result_json, 200
+        return result_dic, 200
 
     except Exception as e:
         write_log(e, 1)
