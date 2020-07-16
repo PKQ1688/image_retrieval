@@ -91,6 +91,17 @@ def delete_table(conn, cursor, table_name):
         write_log(e,1)
 
 
+def delete_all_data(conn, cursor, table_name):
+    sql = 'delete from ' + table_name + ';'
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        print("MYSQL delete all data.")
+    except:
+        print("MYSQL ERROR:", sql, e)
+        write_log(e,1)
+
+
 def count_table(conn, cursor, table_name):
     sql = "select count(milvus_id) from " + table_name + ";"
     try:
