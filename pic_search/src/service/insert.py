@@ -44,17 +44,17 @@ def init_table(index_client, conn, cursor, table_name):
 
 
 def insert_img(index_client, conn, cursor, img_to_vec, insert_img_list, insert_ids_img, table_name):
-        vectors_img = img_to_vec(insert_img_list)
-        # print(len(insert_img_list),len(insert_ids_img))
-        status, ids_milvus = insert_vectors(index_client, table_name, vectors_img)
+    vectors_img = img_to_vec(insert_img_list)
+    # print(len(insert_img_list),len(insert_ids_img))
+    status, ids_milvus = insert_vectors(index_client, table_name, vectors_img)
 
-        file_name = str(uuid.uuid1()) + ".csv"
-        get_ids_file(ids_milvus, insert_ids_img, file_name)
-        print("load data to mysql:", file_name)
-        load_data_to_mysql(conn, cursor, table_name, file_name)
-        if os.path.exists(file_name):
-            os.remove(file_name)
-        return status
+    file_name = str(uuid.uuid1()) + ".csv"
+    get_ids_file(ids_milvus, insert_ids_img, file_name)
+    print("load data to mysql:", file_name)
+    load_data_to_mysql(conn, cursor, table_name, file_name)
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    return status
 
 
 def do_insert(index_client, conn, cursor, img_to_vec, ids_image, img, size, table_name):
