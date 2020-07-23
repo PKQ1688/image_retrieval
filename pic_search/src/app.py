@@ -42,6 +42,7 @@ def do_insert_images_api():
 
     size = args['Size']
     table_name = args['Table']
+    print(args['Id'])
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
