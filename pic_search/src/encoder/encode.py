@@ -9,9 +9,9 @@ import base64
 from PIL import Image
 from io import BytesIO
 
-from numpy import linalg as LA
-import logging as log
-
+# from numpy import linalg as LA
+# import logging as log
+from sklearn.preprocessing import normalize
 
 class Img2Vec(object):
     def __init__(self, model_path=None):
@@ -22,8 +22,9 @@ class Img2Vec(object):
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = models.vgg16(pretrained=True).features
+        #self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cpu")
+        self.model = models.vgg16(pretrained=False).features
         if model_path is not None:
             model_dict = self.model.state_dict()
             pre_model = torch.load(model_path)
@@ -61,10 +62,18 @@ class Img2Vec(object):
         feature_vector = torch.squeeze(feature_vector, 2)
         feature_vector = feature_vector.data.cpu().numpy()
 
+        feature_vector = normalize(feature_vector, norm='l2')
         return feature_vector
 
     def __call__(self, base64list):
-        img_list = [self.base64_pil(base64img) for base64img in base64list]
+        # img_list = [self.base64_pil(base64img) for base64img in base64list]
+        img_list = list()
+        for base64img in base64list:
+            try:
+                img_pil = self.base64_pil(base64img)
+                img_list.append(img_pil)
+            except Exception as e:
+                print(e)
 
         img_list = [img.convert("RGB") for img in img_list]
         img_list = [self.transform(img) for img in img_list]
@@ -77,8 +86,8 @@ class Img2Vec(object):
         feature_vector = feature_vector.tolist()
 
         # feature_list = [feat.tolist() for feat in feature_vector]
-        log.info("--------------encode--------------:feature_vector")
-        log.info(feature_vector)
+        # log.info("--------------encode--------------:feature_vector")
+        # log.info(feature_vector)
         return feature_vector
 
         # norm_feat_list = list()
@@ -105,14 +114,16 @@ if __name__ == '__main__':
         return encodestr
 
 
-    img_path_1 = "test_pic/1.png"
-    img_path_2 = "test_pic/2.png"
-    img_path_3 = "test_pic/3.png"
+    # img_path_1 = "test_pic/1.png"
+    # img_path_2 = "test_pic/2.png"
+    # img_path_3 = "test_pic/3.png"
+    img_path = "/home/shizai/datadisk5/cv/image_retrieval/taiji_test/ae4439bccd9c27bdb6e271216efcd10b.JPEG"
 
     img_list = list()
-    img_list.append(path2base64(img_path_1))
-    img_list.append(path2base64(img_path_2))
-    img_list.append(path2base64(img_path_3))
+    # img_list.append(path2base64(img_path_1))
+    # img_list.append(path2base64(img_path_2))
+    # img_list.append(path2base64(img_path_3))
+    img_list.append(path2base64(img_path))
 
     img_to_vec = Img2Vec()
 

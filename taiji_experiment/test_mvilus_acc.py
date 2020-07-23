@@ -1,40 +1,45 @@
 # -*- coding:utf-8 -*-
 # @author :adolf
 import os
+import json
 from PIL import Image
 import matplotlib.pyplot as plt
 
+import time
 from feature_experiment.test_api import *
 
 img_file_path = "/home/shizai/datadisk5/cv/image_retrieval/taiji_test/"
 img_list = os.listdir(img_file_path)
 
-img_id = 1999
+img_id = 3452
 img_name = img_list[img_id]
 # print(img_name)
 file_path = os.path.join(img_file_path, img_name)
 fileid = "taiji_test_" + str(img_id)
 file_base64 = path2base64(file_path)
-result = getSimilarImages_str(fileid, file_base64)
-# print(result)
-result = result.replace('[', '').replace(']', '').replace("'", '').replace(' ', '')
-result = result.split(',')[1:]
-# print(result)
 
-# img_q = Image.open(file_path)
-# plt.imshow(img_q)
-# plt.show()
+s1 = time.time()
+for _ in range(10):
+    result = getSimilarImages_str(fileid, file_base64)
+e1 = time.time()
 
-flag = 0
-for rank_img_name in result:
-    print(rank_img_name)
-    if "taiji_test" not in rank_img_name or flag > 15:
-        continue
-    img_index = rank_img_name.split('_')[-1]
-    rank_img_path = os.path.join(img_file_path, img_list[int(img_index)])
-    # print(rank_img_path)
-    img_r = Image.open(rank_img_path)
-    plt.imshow(img_r)
+print("get similar use time:",e1 - s1)
+result = json.loads(result)
+result = result["data"][0]["similarImages"]
+print('1111', result)
+
+# print(file_path)
+img_q = Image.open(file_path)
+plt.imshow(img_q)
+plt.show()
+
+for img_dict in result:
+    # print(img_dict["id"])
+    img_x = img_dict["id"].split("_")[-1]
+    print(img_x)
+    img_path = os.path.join(img_file_path, img_list[int(img_x)])
+    # print(img_path)
+    img = Image.open(img_path)
+    plt.imshow(img)
+    plt.title(img_dict["id"])
     plt.show()
-    flag += 1
-    # break

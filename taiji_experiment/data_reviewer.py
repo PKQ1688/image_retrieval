@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 img_file = "/home/shizai/datadisk5/cv/image_retrieval/taiji_test"
 
 img_list = os.listdir(img_file)
-img_name = img_list[26101]
+img_name = img_list[26100]
 print(img_name)
 img = Image.open(os.path.join(img_file, img_name))
 
