@@ -1,0 +1,36 @@
+2020-07-16 09:58:10,216 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 09:58:12,988 - INFO - 192.168.1.127 - - [16/Jul/2020 09:58:12] "[37mPOST /deleteTable HTTP/1.1[0m" 200 -
+2020-07-16 09:59:54,115 - INFO - 192.168.1.127 - - [16/Jul/2020 09:59:54] "[37mPOST /addImages HTTP/1.1[0m" 200 -
+2020-07-16 10:00:19,611 - INFO - 192.168.1.127 - - [16/Jul/2020 10:00:19] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-16 10:00:19,611 - INFO - 192.168.1.127 - - [16/Jul/2020 10:00:19] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-16 10:00:26,183 - INFO - 192.168.1.127 - - [16/Jul/2020 10:00:26] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 10:00:26,183 - INFO - 192.168.1.127 - - [16/Jul/2020 10:00:26] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 10:00:51,393 - INFO - 192.168.1.127 - - [16/Jul/2020 10:00:51] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 10:00:51,393 - INFO - 192.168.1.127 - - [16/Jul/2020 10:00:51] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 10:46:04,173 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 10:46:09,981 - INFO - 192.168.1.127 - - [16/Jul/2020 10:46:09] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 11:15:13,760 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:15:19,436 - ERROR - 'list' object has no attribute 'decode'
+2020-07-16 11:15:19,436 - ERROR - 'list' object has no attribute 'decode'
+2020-07-16 11:15:19,436 - INFO - 192.168.1.127 - - [16/Jul/2020 11:15:19] "[31m[1mPOST /getSimilarImages HTTP/1.1[0m" 400 -
+2020-07-16 11:15:19,436 - INFO - 192.168.1.127 - - [16/Jul/2020 11:15:19] "[31m[1mPOST /getSimilarImages HTTP/1.1[0m" 400 -
+2020-07-16 11:16:27,025 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:16:30,511 - INFO - 192.168.1.127 - - [16/Jul/2020 11:16:30] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 11:18:33,266 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:18:44,077 - ERROR - 'str' object has no attribute 'decode'
+2020-07-16 11:18:44,077 - ERROR - 'str' object has no attribute 'decode'
+2020-07-16 11:18:44,078 - INFO - 192.168.1.127 - - [16/Jul/2020 11:18:44] "[31m[1mPOST /getSimilarImages HTTP/1.1[0m" 400 -
+2020-07-16 11:18:44,078 - INFO - 192.168.1.127 - - [16/Jul/2020 11:18:44] "[31m[1mPOST /getSimilarImages HTTP/1.1[0m" 400 -
+2020-07-16 11:23:11,253 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:24:24,706 - ERROR - 'str' object has no attribute 'decode'
+2020-07-16 11:24:24,706 - ERROR - 'str' object has no attribute 'decode'
+2020-07-16 11:24:24,707 - INFO - 192.168.1.127 - - [16/Jul/2020 11:24:24] "[31m[1mPOST /getSimilarImages HTTP/1.1[0m" 400 -
+2020-07-16 11:24:24,707 - INFO - 192.168.1.127 - - [16/Jul/2020 11:24:24] "[31m[1mPOST /getSimilarImages HTTP/1.1[0m" 400 -
+2020-07-16 11:25:05,236 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:25:16,916 - INFO - 192.168.1.127 - - [16/Jul/2020 11:25:16] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 11:32:38,212 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:33:09,261 - INFO - 192.168.1.127 - - [16/Jul/2020 11:33:09] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 11:37:52,546 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:37:57,911 - INFO - 192.168.1.127 - - [16/Jul/2020 11:37:57] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -
+2020-07-16 11:39:44,472 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-16 11:39:53,668 - INFO - 192.168.1.127 - - [16/Jul/2020 11:39:53] "[37mPOST /getSimilarImages HTTP/1.1[0m" 200 -

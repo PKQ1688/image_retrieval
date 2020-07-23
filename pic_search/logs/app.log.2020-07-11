@@ -1,0 +1,11 @@
+2020-07-11 11:50:26,185 - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2020-07-11 11:50:48,154 - INFO - 192.168.1.127 - - [11/Jul/2020 11:50:48] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-11 11:50:48,154 - INFO - 192.168.1.127 - - [11/Jul/2020 11:50:48] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-11 11:51:05,675 - ERROR - (1146, "Table 'mysql.milvus_image' doesn't exist")
+2020-07-11 11:51:05,675 - ERROR - (1146, "Table 'mysql.milvus_image' doesn't exist")
+2020-07-11 11:51:05,675 - ERROR - (1146, "Table 'mysql.milvus_image' doesn't exist")
+2020-07-11 11:51:05,675 - ERROR - (1146, "Table 'mysql.milvus_image' doesn't exist")
+2020-07-11 11:51:05,676 - INFO - 192.168.1.127 - - [11/Jul/2020 11:51:05] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-11 11:51:05,676 - INFO - 192.168.1.127 - - [11/Jul/2020 11:51:05] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-11 11:51:05,676 - INFO - 192.168.1.127 - - [11/Jul/2020 11:51:05] "[37mPOST /countImages HTTP/1.1[0m" 200 -
+2020-07-11 11:51:05,676 - INFO - 192.168.1.127 - - [11/Jul/2020 11:51:05] "[37mPOST /countImages HTTP/1.1[0m" 200 -

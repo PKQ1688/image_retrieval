@@ -20,13 +20,12 @@ app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
-
+index_client = milvus_client()
 
 def init_conn():
     conn = connect_mysql()
     cursor = conn.cursor()
-    index_client = milvus_client()
-    return index_client, conn, cursor
+    return conn, cursor
 
 
 @app.route('/addImages', methods=['POST'])
@@ -146,9 +145,9 @@ def do_search_images_api():
         image = args['Image'].split(",")
 
     try:
-        index_client, conn, cursor = init_conn()
+        conn, cursor = init_conn()
         result, distance = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
-        print("----------------search_results:", result, distance)
+        print("----------------search_results:", result)
 
         # Python 字典类型转换为 JSON 对象
         result_dic = {"code": 0,"msg": "success"}
