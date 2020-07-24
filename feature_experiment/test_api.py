@@ -68,14 +68,13 @@ def path2base64(img_path):
         encodestr = str(base64.b64encode(image), 'utf-8')
     return encodestr
 
-
 if __name__ == '__main__':
     import time
     import pathos
     from pathos.multiprocessing import ProcessingPool
 
     # print(deleteTable("milvus_image"))
-    # print(countImages())
+    print(countImages())
     # file_path = '/home/shizai/datadisk5/cv/image_retrieval/taiji_test/9579c1426957e9c4d8b7922e8ab0ffcf.JPEG'
     # fileid = "taiji_test_20"
     # file_base64 = path2base64(file_path)
@@ -105,17 +104,17 @@ if __name__ == '__main__':
     # result_add = addImages("/home/shizai/datadisk2/nlp/taiji/taiji_test_id.txt",
     #                        "/home/shizai/datadisk2/nlp/taiji/taiji_test_base64.txt")
     # print(result_add)
-
-    file_id_path = "test_pic/test_file/ids.txt"
-    file_base64_path = "test_pic/test_file/base64.txt"
-    pool = ProcessingPool(10)
-
-    # result = pool.map(getSimilarImages, [[file_id_path, file_base64_path] * 10])
-    while True:
-        s1 = time.time()
-        for _ in range(10):
-            res_ocr = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
-        e1 = time.time()
-        print("use time", e1 - s1)
-        print("use mean time", (e1 - s1) / 10.0)
-    print(result)
+    #
+    # file_id_path = "test_pic/test_file/ids.txt"
+    # file_base64_path = "test_pic/test_file/base64.txt"
+    # pool = ProcessingPool(10)
+    #
+    # # result = pool.map(getSimilarImages, [[file_id_path, file_base64_path] * 10])
+    # while True:
+    #     s1 = time.time()
+    #     for _ in range(10):
+    #         res_ocr = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
+    #     e1 = time.time()
+    #     print("use time", e1 - s1)
+    #     print("use mean time", (e1 - s1) / 10.0)
+    # print(result)

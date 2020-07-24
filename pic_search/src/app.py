@@ -14,13 +14,13 @@ from indexer.tools import connect_mysql
 from indexer.logs import write_log
 import time
 
-
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
 CORS(app)
 
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 index_client = milvus_client()
+
 
 def init_conn():
     conn = connect_mysql()
@@ -42,6 +42,7 @@ def do_insert_images_api():
     size = args['Size']
     table_name = args['Table']
     print(args['Id'])
+
     if file_id:
         ids = str(file_id.read().decode("utf-8")).strip().split(",")
         ids = ids[:-1]
@@ -95,7 +96,7 @@ def do_count_images_api():
         parse_args()
     table_name = args['Table']
 
-    print("table_name",table_name)
+    print("table_name", table_name)
     try:
         index_client, conn, cursor = init_conn()
         rows_milvus, rows_mysql = do_count(index_client, conn, cursor, table_name)
@@ -152,19 +153,19 @@ def do_search_images_api():
         print("----------------search_results:", result)
 
         # Python 字典类型转换为 JSON 对象
-        result_dic = {"code": 0,"msg": "success"}
+        result_dic = {"code": 0, "msg": "success"}
         data = []
         for i in range(len(ids)):
             id_dis = []
             for j in range(len(result[i])):
                 id_sim = {
-                "id": result[i][j],
-                "similarity": distance[i][j]
+                    "id": result[i][j],
+                    "similarity": distance[i][j]
                 }
                 id_dis.append(id_sim)
             re_sim = {
-            "id": ids[i],
-            "similarImages": id_dis
+                "id": ids[i],
+                "similarImages": id_dis
             }
             data.append(re_sim)
 
@@ -184,4 +185,4 @@ def do_search_images_api():
 
 
 if __name__ == "__main__":
-    app.run(threaded=True, host="0.0.0.0", port=5000)
+    app.run(threaded=True, host="0.0.0.0", port=5000, debug=True)
