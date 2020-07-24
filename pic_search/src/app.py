@@ -21,8 +21,6 @@ CORS(app)
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 index_client = milvus_client()
 
-print("test service!")
-
 
 def init_conn():
     conn = connect_mysql()
@@ -98,6 +96,7 @@ def do_count_images_api():
         parse_args()
     table_name = args['Table']
 
+    print("111111111")
     print("table_name", table_name)
     try:
         index_client, conn, cursor = init_conn()
