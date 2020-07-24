@@ -21,6 +21,8 @@ CORS(app)
 img_to_vec = Img2Vec(model_path="./src/model/vgg_triplet.pth")
 index_client = milvus_client()
 
+print("test service!")
+
 
 def init_conn():
     conn = connect_mysql()
