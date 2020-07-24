@@ -25,7 +25,10 @@ index_client = milvus_client()
 def init_conn():
     conn = connect_mysql()
     cursor = conn.cursor()
-    return conn, cursor
+    global index_client
+    if not index_client.ping():
+        index_client = milvus_client()
+    return index_client, conn, cursor
 
 
 @app.route('/addImages', methods=['POST'])
@@ -149,7 +152,7 @@ def do_search_images_api():
         image = args['Image'].split(",")
 
     try:
-        conn, cursor = init_conn()
+        index_client, conn, cursor = init_conn()
         result, distance = do_search(index_client, conn, cursor, img_to_vec, image, table_name)
         print("----------------search_results:", result)
 
