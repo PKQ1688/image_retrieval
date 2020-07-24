@@ -97,7 +97,7 @@ def do_count_images_api():
     table_name = args['Table']
 
     print("111111111")
-    print("table_name", table_name)
+    # print("table_name", table_name)
     try:
         index_client, conn, cursor = init_conn()
         rows_milvus, rows_mysql = do_count(index_client, conn, cursor, table_name)
