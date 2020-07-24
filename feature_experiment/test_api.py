@@ -91,12 +91,15 @@ if __name__ == '__main__':
     #     line_img = line_img.split(',')[:-1]
     #
     # for index in range(len(line_id)):
-    #     if index < 39549:
-    #         continue
+    #     # if index < 39549:
+    #     #     continue
     #     print(index)
     #     file_id = line_id[index]
     #     file_base64 = line_img[index]
     #     addImages_str(file_id, file_base64)
+
+    # pool = ProcessingPool(10)
+    # result = pool.map(addImages_str(line_id, line_img))
 
     # result_count = countImages()
     # result_add = addImages("/home/shizai/datadisk2/nlp/taiji/taiji_test_id.txt",
@@ -106,12 +109,13 @@ if __name__ == '__main__':
     file_id_path = "test_pic/test_file/ids.txt"
     file_base64_path = "test_pic/test_file/base64.txt"
     pool = ProcessingPool(10)
-    s1 = time.time()
+
     # result = pool.map(getSimilarImages, [[file_id_path, file_base64_path] * 10])
     while True:
+        s1 = time.time()
         for _ in range(10):
             res_ocr = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
         e1 = time.time()
         print("use time", e1 - s1)
         print("use mean time", (e1 - s1) / 10.0)
-    # print(result)
+    print(result)
