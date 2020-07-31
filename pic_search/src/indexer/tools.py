@@ -2,6 +2,7 @@ import logging as log
 from common.config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PWD, MYSQL_DB
 import pymysql
 from indexer.logs import write_log
+import os
 
 
 def connect_mysql():
@@ -55,7 +56,6 @@ def search_by_image_id(conn, cursor, image_id, table_name):
         write_log(e,1)
 
 
-
 def load_data_to_mysql(conn, cursor, table_name, file_name):
     sql = "load data local infile '" + file_name + "' into table " + table_name + " fields terminated by ',';"
     try:
@@ -65,7 +65,12 @@ def load_data_to_mysql(conn, cursor, table_name, file_name):
     except Exception as e:
         print("MYSQL ERROR:", sql, e)
         write_log(e,1)
-
+    finally:
+        if os.path.exists(file_name):
+            with open(file_name) as f:
+                line = f.readline()
+                write_log("-----------MySQL insert info--------" + str(line))
+            os.remove(file_name)
 
 
 def delete_data(conn, cursor, image_id, table_name):
