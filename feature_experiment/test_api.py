@@ -68,6 +68,7 @@ def path2base64(img_path):
         encodestr = str(base64.b64encode(image), 'utf-8')
     return encodestr
 
+
 if __name__ == '__main__':
     import time
     import pathos
@@ -91,7 +92,7 @@ if __name__ == '__main__':
     #
     # for index in range(len(line_id)):
     #     # if index < 39549:
-    #     #     continue
+    #         # continue
     #     print(index)
     #     file_id = line_id[index]
     #     file_base64 = line_img[index]
@@ -108,13 +109,14 @@ if __name__ == '__main__':
     # file_id_path = "test_pic/test_file/ids.txt"
     # file_base64_path = "test_pic/test_file/base64.txt"
     # pool = ProcessingPool(10)
-    #
-    # # result = pool.map(getSimilarImages, [[file_id_path, file_base64_path] * 10])
+    # #
+    # # # result = pool.map(getSimilarImages, [[file_id_path, file_base64_path] * 10])
     # while True:
     #     s1 = time.time()
     #     for _ in range(10):
     #         res_ocr = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
+    #         print(res_ocr)
     #     e1 = time.time()
     #     print("use time", e1 - s1)
     #     print("use mean time", (e1 - s1) / 10.0)
-    # print(result)
+
