@@ -33,8 +33,8 @@ def create_table(client, table_name=None, dimension=VECTOR_DIMENSION,
 def insert_vectors(client, table_name, vectors):
     try:
         status, ids = client.insert(collection_name=table_name, records=vectors)
-        print("-----------Milvus insert ids--------" + str(ids))
-        write_log("-----------Milvus insert ids--------" + str(ids))
+        print("-----------Milvus insert ids--------" + str(len(ids)) + "------" + str(ids))
+        write_log("-----------Milvus insert ids--------" + str(len(ids)) + "------" + str(ids))
         return status, ids
     except Exception as e:
         print("Milvus ERROR:", e)

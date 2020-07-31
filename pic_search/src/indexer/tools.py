@@ -69,8 +69,8 @@ def load_data_to_mysql(conn, cursor, table_name, file_name):
         if os.path.exists(file_name):
             with open(file_name) as f:
                 line = f.readlines()
-                print("-----------MySQL insert info--------" + str(line))
-                write_log("-----------MySQL insert info--------" + str(line))
+                print("-----------MySQL insert info--------" + str(len(line)) + "------" + str(line))
+                write_log("-----------MySQL insert info--------" + str(len(line)) + "------" + str(line))
             os.remove(file_name)
 
 
