@@ -150,7 +150,7 @@ def write_log(log_message, level=0):
     fmt = logging.Formatter(formattler)
 
     stream_handler = logging.StreamHandler(sys.stdout)
-    stream_handler.setLevel(logging.ERROR)
+    stream_handler.setLevel(logging.INFO)
     stream_handler.setFormatter(fmt)
 
 
