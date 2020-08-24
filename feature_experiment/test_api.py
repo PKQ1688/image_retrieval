@@ -110,13 +110,15 @@ if __name__ == '__main__':
     # file_base64_path = "test_pic/test_file/base64.txt"
     # pool = ProcessingPool(10)
     # #
-    # # # result = pool.map(getSimilarImages, [[file_id_path, file_base64_path] * 10])
+    # result = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
+    # print(result)
     # while True:
-    #     s1 = time.time()
-    #     for _ in range(10):
-    #         res_ocr = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
-    #         print(res_ocr)
-    #     e1 = time.time()
-    #     print("use time", e1 - s1)
-    #     print("use mean time", (e1 - s1) / 10.0)
+    # s1 = time.time()
+    # for _ in range(1):
+    #     res_ocr = pool.map(getSimilarImages, [file_id_path] * 10, [file_base64_path] * 10)
+    #     print(res_ocr)
+    #
+    # e1 = time.time()
+    # print("use time", e1 - s1)
+    # print("use mean time", (e1 - s1) / 10.0)
 
