@@ -35,6 +35,7 @@ def addImages_str(file_id, file_base64):
     data = {"Id": file_id, "Image": file_base64}
     r = requests.post(url, data=data)
     result_ = r.text
+    print(result_)
     return result_
 
 
@@ -121,4 +122,3 @@ if __name__ == '__main__':
     # e1 = time.time()
     # print("use time", e1 - s1)
     # print("use mean time", (e1 - s1) / 10.0)
-

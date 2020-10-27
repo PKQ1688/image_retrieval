@@ -15,7 +15,7 @@ img_name = img_list[img_id]
 
 pool = ProcessingPool(100)
 file_path = os.path.join(img_file_path, img_name)
-fileid = "taiji_test_" + str(img_id)
+fileid = ("taiji_test_" + str(img_id)) * 10
 file_base64 = path2base64(file_path)
 
 s1 = time.time()

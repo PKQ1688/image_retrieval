@@ -25,6 +25,7 @@ for img_id in img_id_random_list:
     fileid = "taiji_test_" + str(img_id)
     file_base64 = path2base64(file_path)
 
+    # print(file_base64)
     s1 = time.time()
     # for _ in range(10):
     result = getSimilarImages_str(fileid, file_base64)
@@ -42,7 +43,7 @@ for img_id in img_id_random_list:
     img_q = Image.open(file_path)
     img_q.save(os.path.join(result_path, "ori_img.jpg"))
     # plt.imshow(img_q)
-    # plt.show()
+    # plt.show()ok
 
     for index, img_dict in enumerate(result):
         print(index)
@@ -53,7 +54,7 @@ for img_id in img_id_random_list:
 
         # print(img_path)
         img = Image.open(img_path)
-        img.save(os.path.join(result_path, "get_img_" + str(index) + ".jpg"))
-        # plt.imshow(img)
-        # plt.title(img_dict["id"])
-        # plt.show()
+        # img.save(os.path.join(result_path, "get_img_" + str(index) + ".jpg"))
+        plt.imshow(img)
+        plt.title(img_dict["id"])
+        plt.show()
