@@ -43,4 +43,4 @@ query_list = random.sample(img_file_list, 300)
 print(query_list)
 for query_name in query_list:
     shutil.copyfile(os.path.join(img_file, query_name),
-                    os.path.join("/home/shizai/data2/ocr_data/taiji_query",query_name))
+                    os.path.join("/home/shizai/data2/ocr_data/taiji_query", query_name))
